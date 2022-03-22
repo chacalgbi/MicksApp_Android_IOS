@@ -3,14 +3,15 @@
 // Só funcionou assim
 //  Fiz isso uma vez: npx react-native bundle --reset-cache --entry-file ./index.js --platform ios --dev false --assets-dest ./ios --bundle-output ./ios/main.jsbundle
 // 1 - npx react-native run-ios --device "Marketing" - Se disse que não achou o device, faz de novo que vai
-// 2 - Sacudi o iPhone / ir em Configure Bundle / Reset to Default - Isso só é necessário na primeira instalação do Aplicativo,
+// 2 - COLOCAR O IPHONE NA MESMA REDE / Sacudi o iPhone / Configure Bundle / Reset to Default - Isso só é necessário na primeira instalação do Aplicativo,
 //     no outro dia cheguei e fiz o comado acima e deu certo de primeira.
 // Só depois iniciar o projeto do Android (Para aproveitar o metro bundle que o debug do iPhone gera automaticamente)
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import SplashScreen from 'react-native-splash-screen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View, Text, Image, StyleSheet } from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { UsersProvider } from './src/utils/UserProvider'
 import UsersContext from './src/utils/UserProvider'
 import LottieView from 'lottie-react-native'
@@ -37,30 +38,34 @@ const Stack = createNativeStackNavigator();
 function Splash({ navigation }) {
 	const {users_data, dispatch} = useContext(UsersContext)
 
-	setTimeout(()=>{ 
-		if(users_data.clientMicks === 'no'){
-			navigation.navigate('CPF')
-		}else if(users_data.userApp === 'no'){
-			navigation.navigate('Cadastro')
-		}else if(users_data.appLogged === 'no'){
-			navigation.navigate('Login')
-		}else{
-			navigation.navigate('Main')
-		}
-	}, 500)
+	useEffect(() => {
+		setTimeout(()=>{ 
+			if(users_data.clientMicks === 'no'){
+				navigation.navigate('CPF')
+			}else if(users_data.userApp === 'no'){
+				navigation.navigate('Cadastro')
+			}else if(users_data.appLogged === 'no'){
+				navigation.navigate('Login')
+			}else{
+				navigation.navigate('Main')
+			}
+		}, 1000)
+	}, [])
 
 	return (
-		<View style={stl.corpo}>
+		<TouchableOpacity style={stl.corpo} onPress={()=>{ navigation.navigate('Main') }} >
 			<Text style={stl.title}>Micks Fibra</Text>
 			<Image style={stl.img} source={logoMicks} />
-			<LottieView autoPlay loop style={{width: 200, height: 200}} source={require('./src/assets/03.json')} />
-		</View>
+			<LottieView autoPlay loop style={{width: 150, height: 150}} source={require('./src/assets/03.json')} />
+		</TouchableOpacity>
 	);
 }
 
 
 export default function App() {
 	const [token, setToken] = useMMKVStorage("token", storage, "")
+
+	useEffect(() => { SplashScreen.hide() }, [])
 
 	PushNotification.configure({
 		onRegister: function (res) { 
@@ -119,18 +124,18 @@ export default function App() {
 
 const stl = StyleSheet.create({
     img:{
-		width: 200,
-		height: 200,
+		width: 150,
+		height: 150,
 	},
 	corpo:{
-		backgroundColor: estilo.cor.fundo,
+		backgroundColor: '#03CCD3',
         flex: 1,
 		justifyContent: 'center', // alinhar no sentido vertical (em cima e embaixo)
 		alignItems: 'center', // alinha no sentido horizontal (esquerda e direita)
 	},
 	title:{
-        margin: 20,
-        fontSize: 27,
-		color: estilo.cor.fonte
+        margin: 10,
+        fontSize: 35,
+		color: '#FFFFFF'
 	}
 });
