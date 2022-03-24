@@ -11,7 +11,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import SplashScreen from 'react-native-splash-screen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity, Platform } from 'react-native'
 import { UsersProvider } from './src/utils/UserProvider'
 import UsersContext from './src/utils/UserProvider'
 import LottieView from 'lottie-react-native'
@@ -29,16 +29,17 @@ import Avalie from './src/telas/Avalie'
 import Relatar from './src/telas/Relatar'
 import estilo from "./src/utils/cores"
 import info from './src/utils/info'
-import PushNotification from "react-native-push-notification";
+//import PushNotification from "react-native-push-notification";
 import MMKVStorage, { useMMKVStorage } from "react-native-mmkv-storage";
-const storage = new MMKVStorage.Loader().withEncryption().initialize();
+import messaging from '@react-native-firebase/messaging';
 
+const storage = new MMKVStorage.Loader().withEncryption().initialize();
 const Stack = createNativeStackNavigator();
 
 function Splash({ navigation }) {
 	const {users_data, dispatch} = useContext(UsersContext)
 
-	useEffect(() => {
+	//useEffect(() => {
 		setTimeout(()=>{ 
 			if(users_data.clientMicks === 'no'){
 				navigation.navigate('CPF')
@@ -49,8 +50,8 @@ function Splash({ navigation }) {
 			}else{
 				navigation.navigate('Main')
 			}
-		}, 1000)
-	}, [])
+		}, 500)
+	//}, [users_data])
 
 	return (
 		<TouchableOpacity style={stl.corpo} onPress={()=>{ navigation.navigate('Main') }} >
@@ -61,15 +62,31 @@ function Splash({ navigation }) {
 	);
 }
 
-
 export default function App() {
 	const [token, setToken] = useMMKVStorage("token", storage, "")
 
-	useEffect(() => { SplashScreen.hide() }, [])
+	function getToken(token){
+		console.log(info.result, "TOKEN:",token);
+		setToken(token)
+	}
 
+	useEffect(()=>{
+		SplashScreen.hide()
+
+		//if(Platform.OS === 'ios'){
+			messaging().getToken().then(getToken) // Pega o token quando o APP iniciar
+			const removeListener =  messaging().onTokenRefresh(getToken) // Fica ouvindo para caso o token mude durante o uso do APP
+			return ()=>{ 
+				removeListener() // Ao desmontar o componente remove o ouvinte.
+			}
+		//}
+
+	}, [])
+
+	/*
 	PushNotification.configure({
 		onRegister: function (res) { 
-			//console.log(info.result, "TOKEN:", res.token);
+			console.log(info.result, "TOKEN Android:", res.token);
 			setToken(res.token)
 		},
 
@@ -89,7 +106,7 @@ export default function App() {
 		},
 
 		onRegistrationError: function(err) { 
-			console.error(err.message, err); 
+			//console.error(err.message, err); 
 		},
 
 		// IOS ONLY (optional): default: all - Permissions to register.
@@ -97,6 +114,7 @@ export default function App() {
 		popInitialNotification: true,
 		requestPermissions: true,
 	});
+	*/
 
 	return (
 		<SafeAreaProvider>
@@ -107,7 +125,7 @@ export default function App() {
 						<Stack.Screen name="CPF"          component={CPF}          options={{ headerShown: false, headerStyle: {backgroundColor: estilo.cor.fundo}, headerTintColor: estilo.cor.fonte, headerTitleStyle:{fontWeight: 'bold'}, title: 'Digite seu CPF' }} />
 						<Stack.Screen name="Cadastro"     component={Cadastro}     options={{ headerShown: false, headerStyle: {backgroundColor: estilo.cor.fundo}, headerTintColor: estilo.cor.fonte, headerTitleStyle:{fontWeight: 'bold'}, title: 'Faça seu cadastro' }} />
 						<Stack.Screen name="Login"        component={Login}        options={{ headerShown: false, headerStyle: {backgroundColor: estilo.cor.fundo}, headerTintColor: estilo.cor.fonte, headerTitleStyle:{fontWeight: 'bold'}, title: 'Efetue Login' }} />
-						<Stack.Screen name="Main"         component={Main}         options={{ headerShown: false, headerStyle: {backgroundColor: estilo.cor.fundo}, headerTintColor: estilo.cor.fonte, headerTitleStyle:{fontWeight: 'bold'}, title: 'Micks App' }} />
+						<Stack.Screen name="Main"         component={Main}         options={{ headerShown: false, headerStyle: {backgroundColor: estilo.cor.fundo}, headerTintColor: estilo.cor.fonte, headerTitleStyle:{fontWeight: 'bold'}, title: 'Micks App', gestureEnabled: false }} />
 						<Stack.Screen name="Faturas"      component={Faturas}      options={{ headerShown: true,  headerStyle: {backgroundColor: estilo.cor.fundo}, headerTintColor: estilo.cor.fonte, headerTitleStyle:{fontWeight: 'bold'}, title: 'Faturas' }} />
 						<Stack.Screen name="Extrato"      component={Extrato}      options={{ headerShown: true,  headerStyle: {backgroundColor: estilo.cor.fundo}, headerTintColor: estilo.cor.fonte, headerTitleStyle:{fontWeight: 'bold'}, title: 'Detalhes da conexão' }} />
 						<Stack.Screen name="Desbloqueio"  component={Desbloqueio}  options={{ headerShown: true,  headerStyle: {backgroundColor: estilo.cor.fundo}, headerTintColor: estilo.cor.fonte, headerTitleStyle:{fontWeight: 'bold'}, title: 'Desbloqueio provisório' }} />

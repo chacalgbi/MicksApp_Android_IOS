@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Linking, BackHandler, Alert } from 'react-native'
 import LottieView from 'lottie-react-native';
 import {SpeedDial} from 'react-native-elements'
 import UsersContext from '../utils/UserProvider'
@@ -12,6 +12,7 @@ const storage = new MMKVStorage.Loader().withEncryption().initialize()
 
 export default function Main({ navigation }) {
     const [confirm, setConfirm] = useState(false)
+    const [exit, setExit] = useState(false)
     const {users_data, dispatch} = useContext(UsersContext)
     const [email, setEmail] = useMMKVStorage("email", storage, "")
     const [open, setOpen] = useState(false);
@@ -30,7 +31,23 @@ export default function Main({ navigation }) {
 		});
 	}
 
-	useEffect(() => { isGet() }, [])
+	useEffect(() => {
+        isGet()
+
+        function onBeforeRemove(e){
+            e.preventDefault()
+            console.log('Voltou')
+            setExit(true)
+        }
+
+        navigation.addListener('beforeRemove', onBeforeRemove)
+        console.log("listener added")
+    
+        return function cleanup() {
+          navigation.removeListener('beforeRemove', onBeforeRemove)
+        }
+
+    }, [navigation])
 
     function set(type, payload){
         console.log(`UsersContext: Type: ${type}, Payload: ${payload}`)
@@ -102,6 +119,18 @@ export default function Main({ navigation }) {
                 showConfirmButton={true}
                 onCancelPressed ={() => { setConfirm(false); setOpen(false); }}
                 onConfirmPressed={() => { setConfirm(false); setOpen(false); setTimeout(()=>{ set('jaTenhoConta', {}) },500) }}
+            />
+
+            <Msg
+                show={exit}
+                showProgress={false}
+                title="Atenção!"
+                message="Deseja sair do Aplicartivo?"
+                confirmButtonColor="#4460D9"
+                showCancelButton={true}
+                showConfirmButton={true}
+                onCancelPressed ={() => { setExit(false) }}
+                onConfirmPressed={() => { setExit(false); setTimeout(()=>{ BackHandler.exitApp() },500) }}
             />
 
         </View>

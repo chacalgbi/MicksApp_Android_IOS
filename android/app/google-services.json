@@ -1,39 +1,46 @@
 {
-    "project_info": {
-      "project_number": "168358164876",
-      "project_id": "appmicks",
-      "storage_bucket": "appmicks.appspot.com"
-    },
-    "client": [
-      {
-        "client_info": {
-          "mobilesdk_app_id": "1:168358164876:android:13626906a2ff1810903ea9",
-          "android_client_info": {
-            "package_name": "com.micksapp"
-          }
-        },
-        "oauth_client": [
-          {
-            "client_id": "168358164876-364idjh554j8dr0kl1tppqbgs0ql103o.apps.googleusercontent.com",
-            "client_type": 3
-          }
-        ],
-        "api_key": [
-          {
-            "current_key": "AIzaSyB4AIB8VocSpLViPzatDhhkQ_ShmyzjBkE"
-          }
-        ],
-        "services": {
-          "appinvite_service": {
-            "other_platform_oauth_client": [
-              {
-                "client_id": "168358164876-364idjh554j8dr0kl1tppqbgs0ql103o.apps.googleusercontent.com",
-                "client_type": 3
+  "project_info": {
+    "project_number": "168358164876",
+    "project_id": "appmicks",
+    "storage_bucket": "appmicks.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:168358164876:android:3ca51e702ab7d744903ea9",
+        "android_client_info": {
+          "package_name": "org.reactjs.native.example.MicksApp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "168358164876-364idjh554j8dr0kl1tppqbgs0ql103o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4AIB8VocSpLViPzatDhhkQ_ShmyzjBkE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "168358164876-364idjh554j8dr0kl1tppqbgs0ql103o.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "168358164876-8ru0jhe6tmesd5ebcm284uemmnj3c7vi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.notificacaoMicksTelecom"
               }
-            ]
-          }
+            }
+          ]
         }
       }
-    ],
-    "configuration_version": "1"
-  }
+    }
+  ],
+  "configuration_version": "1"
+}
