@@ -38,7 +38,7 @@ export default function Faturas() {
         }
         
         setInfo(true)
-        console.log("Códigos de Cliente:", arrayCoder)
+        //console.log("Códigos de Cliente:", arrayCoder)
 
         let boletoTemp = []
         for (const [index, cod] of arrayCoder.entries()) {
@@ -59,7 +59,7 @@ export default function Faturas() {
 
             })
             .catch((e)=>{
-                console.log(e);
+                //console.log(e);
                 showErro(e)
             });
 
@@ -167,7 +167,7 @@ export default function Faturas() {
                     addAndroidDownloads: {
                         notification: true,
                         title: 'Fatura Micks',
-                        description: 'Boleto Micks Telecom',
+                        description: 'Boleto Micks',
                         mime: 'application/pdf',
                         mediaScannable: true,
                     }
@@ -252,7 +252,8 @@ const stl = StyleSheet.create({
         color: estilo.cor.fonte,
         fontSize: 18,
         marginLeft: 20,
-        marginBottom: 10
+        marginBottom: 10,
+        marginTop: 10
     },
     subtitle:{
         color: estilo.cor.fonte,

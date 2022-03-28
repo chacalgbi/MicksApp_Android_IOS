@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react'
-import { StyleSheet, Text, View, ScrollView, Alert, TouchableOpacity } from 'react-native'
+import React, { useState, useContext, useEffect } from 'react'
+import { StyleSheet, Text, View, ScrollView, Alert, Image, TouchableOpacity, BackHandler, Platform } from 'react-native'
 import logoMicks from '../assets/avatar_micks.png'
 import UsersContext from '../utils/UserProvider'
 import estilo from '../utils/cores'
@@ -13,7 +13,7 @@ import MMKVStorage, { useMMKVStorage } from "react-native-mmkv-storage";
 
 const storage = new MMKVStorage.Loader().withEncryption().initialize();
 
-export default function Login() {
+export default function Login({ navigation }) {
     const [token, setToken] = useMMKVStorage("token", storage, "");
     const {users_data, dispatch} = useContext(UsersContext)
     const [seach, setSeach] = useState(false);
@@ -25,8 +25,14 @@ export default function Login() {
     const [showProgress, setShowProgress] = useState(true)
     const [msg, setMsg] = useState('')
 
+    useEffect(() => {
+        const backAction = () => { BackHandler.exitApp() }
+        const backHandler = BackHandler.addEventListener( "hardwareBackPress", backAction );
+        return () => backHandler.remove();
+    }, []);
+
     function set(type, payload){
-        console.log(`UsersContext: Type: ${type}, Payload: ${payload}`)
+        //console.log(`UsersContext: Type: ${type}, Payload: ${payload}`)
         dispatch({
             type: type,
             payload: payload
@@ -57,7 +63,7 @@ export default function Login() {
         })
         .catch((e)=>{
             setSeach(false)
-            console.log(e);
+            //console.log(e);
             Alert.alert('Erro', `${e}`)
         });
     }
@@ -99,7 +105,7 @@ export default function Login() {
             }
         })
         .catch((e)=>{
-            console.log(e);
+            //console.log(e);
             Alert.alert('Erro', `${e}`)
         });
     }
@@ -119,6 +125,7 @@ export default function Login() {
 	return (
         <ScrollView style={stl.scroll}>
             <View style={stl.corpo}>
+                <Image style={stl.img} source={logoMicks} />
                 <Text style={stl.title}>Login</Text>
 
                 <InputEmail
@@ -194,7 +201,7 @@ const stl = StyleSheet.create({
 		alignItems: 'center', // alinha no sentido horizontal (esquerda e direita)
 	},
 	title:{
-        marginTop: 60,
+        marginTop: 20,
         fontSize: 27,
 		color: estilo.cor.fonte
 	},
@@ -203,4 +210,9 @@ const stl = StyleSheet.create({
         textDecorationLine: 'underline',
         paddingTop: 15
     },
+    img:{
+        marginTop: Platform.OS === 'ios' ? 40 : 10,
+		width: 60,
+		height: 60,
+	}
 });

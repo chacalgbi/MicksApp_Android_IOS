@@ -14,47 +14,61 @@ export default function Main({ navigation }) {
     const [confirm, setConfirm] = useState(false)
     const [exit, setExit] = useState(false)
     const {users_data, dispatch} = useContext(UsersContext)
-    const [email, setEmail] = useMMKVStorage("email", storage, "")
     const [open, setOpen] = useState(false);
     const [urls, setUrls] = useState([]);
+    const [planos, setPlanos] = useState(0);
 
     async function isGet(){
-		await API('isgetapp', { email })
+		await API('isgetapp', { email: users_data.email, doc: users_data.cliDOC })
 		.then((res)=>{
             setTimeout(()=>{
+                setPlanos(res.data.dados.ativos)
                 setUrls(res.data.urls)
-            }, 100)
+                set('setUpdate', {
+                    codsercli: res.data.dados.codsercli,
+                    descriSer: res.data.dados.descriser,
+                    login: res.data.dados.login
+                })
+            }, 200)
             
 		})
 		.catch((e)=>{
-			console.log(e); 
+			//console.log(e);
+            Alert.alert('Erro', `${e}`)
 		});
 	}
+
+    function onBeforeRemove(e){
+        e.preventDefault() // Previne voltar para a Tela de Splash Screen quando tocar no botão de voltar
+        setExit(true)
+    }
 
 	useEffect(() => {
         isGet()
 
-        function onBeforeRemove(e){
-            e.preventDefault()
-            console.log('Voltou')
-            setExit(true)
-        }
-
-        navigation.addListener('beforeRemove', onBeforeRemove)
-        console.log("listener added")
+        navigation.addListener('beforeRemove', onBeforeRemove) // add ao EventListener a função "onBeforeRemove"
     
         return function cleanup() {
-          navigation.removeListener('beforeRemove', onBeforeRemove)
+          navigation.removeListener('beforeRemove', onBeforeRemove) // Ao desmontar o componente, remove o "onBeforeRemove"
         }
 
     }, [navigation])
 
     function set(type, payload){
-        console.log(`UsersContext: Type: ${type}, Payload: ${payload}`)
+        //console.log(`UsersContext: Type: ${type}, Payload: ${payload}`)
         dispatch({
             type: type,
             payload: payload
         })
+    }
+
+    function getLogin(){
+        setConfirm(false)
+        setOpen(false)
+        navigation.removeListener('beforeRemove', onBeforeRemove)
+        setTimeout(()=>{ 
+            set('jaTenhoConta', {})
+        },500)
     }
 
     return(
@@ -99,6 +113,7 @@ export default function Main({ navigation }) {
                         <Text style={stl.labels}>Conversar com um atendente</Text>
                     </TouchableOpacity>                    
                 </View>
+                <Text style={stl.planosAtivos}>Planos ativos: {planos}</Text>
 
             </View>
 
@@ -118,7 +133,7 @@ export default function Main({ navigation }) {
                 showCancelButton={true}
                 showConfirmButton={true}
                 onCancelPressed ={() => { setConfirm(false); setOpen(false); }}
-                onConfirmPressed={() => { setConfirm(false); setOpen(false); setTimeout(()=>{ set('jaTenhoConta', {}) },500) }}
+                onConfirmPressed={() => { getLogin() }}
             />
 
             <Msg
@@ -172,5 +187,9 @@ const stl = StyleSheet.create({
     labels:{
         color: estilo.cor.fonte,
         fontSize: 15
+    },
+    planosAtivos:{
+        color: estilo.cor.item,
+        margin: 15
     }
 });

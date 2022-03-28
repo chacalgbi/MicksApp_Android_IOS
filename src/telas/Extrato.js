@@ -85,8 +85,8 @@ export default function Extrato(props){
             }
         })
         .catch((e)=>{
-            //setWarning(e)
-            console.log(e)
+            setWarning(e)
+            //console.log(e)
             setTimeout(() => { setSeach(false) }, 500);
         });
     }

@@ -37,8 +37,8 @@ export default function Modificar(props){
             }
         })
         .catch((e)=>{
-            console.log(e);
-            Alert.alert('OPS!','Erro interno, tente novamente mais tarde')
+            //console.log(e);
+            Alert.alert('OPS!',`${e}`)
         });
     }
 

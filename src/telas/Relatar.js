@@ -56,7 +56,7 @@ export default function Relatar() {
         })
         .catch((e)=>{
             console.log(e);
-            showErro('Erro interno, tente novamente mais tarde')
+            showErro(`${e}`)
         });
     }
 
@@ -65,14 +65,13 @@ export default function Relatar() {
             Alert.alert('Ops!', "Selecione um plano!")
         }else if(motivo == '' ){
             Alert.alert('Ops!', "Selecione um motivo")
-        }else if(dependente == '' && !check1){
-            Alert.alert('Ops!', "Selecione o que você é do titular do plano")
-        }else if(cel.length < 10){
+        }else if(cel.length < 16){
             setCelErr('Ops! Número de telefone inválido! Digite um número com 11 caracteres.')
         }else if(obs.length < 15){
             setObsErr('Ops! Descrição muito curta! Digite uma descrição mais detalhada!')
-        }else if(nome.length < 5 && !check1){
-            setNomeErr('Ops! Digite um nome com pelo menos 5 caracteres')
+        }else if(check1 === false){
+            dependente === '' ? Alert.alert('Ops!', 'Selecione o que você é do titular do plano') : null
+            nome.length < 5   ? Alert.alert('Ops!', 'Digite um nome com pelo menos 5 caracteres') : null
         }else{
             let obj = {
                 codsercli: selectedCodsercli,
@@ -85,6 +84,7 @@ export default function Relatar() {
                 nome: nome
             }
             abrirAtendimento(obj)
+            //console.log(obj)
         }
     }
 
@@ -93,6 +93,7 @@ export default function Relatar() {
             <View style={stl.corpo}>
                 <InputCel
                     placeholder='Digite seu n° de contato'
+                    mask={"([00]) [0].[0000]-[0000]"}
                     onChangeText={(v)=>{ 
                         setCel(v)
                         setCelErr('')
@@ -115,7 +116,12 @@ export default function Relatar() {
                     center
                     title="Sou o titular no plano"
                     checked={check1}
-                    onPress={() => setCheck1(!check1)}
+                    onPress={() =>{
+                        setCheck1(!check1)
+                        setNome('')
+                        setNomeErr('')
+                        setDependente('')
+                    }}
                 />
                 {!check1 &&
                     <>

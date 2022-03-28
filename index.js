@@ -5,7 +5,7 @@ import {name as appName} from './app.json';
 
 // Register background handler
 messaging().setBackgroundMessageHandler(async remoteMessage => {
-    console.log('Mensagem em segundo plano!', remoteMessage);
+    //console.log('Mensagem em segundo plano!', remoteMessage);
 });
 
 AppRegistry.registerComponent(appName, () => App);

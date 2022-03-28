@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:168358164876:android:3ca51e702ab7d744903ea9",
+        "mobilesdk_app_id": "1:168358164876:android:1a47c128cb94e0d7903ea9",
         "android_client_info": {
-          "package_name": "org.reactjs.native.example.MicksApp"
+          "package_name": "com.micksapp"
         }
       },
       "oauth_client": [

@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react'
-import { StyleSheet, Text, View, ScrollView, Alert, Image, TouchableOpacity } from 'react-native'
+import React, { useState, useContext, useEffect } from 'react'
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, BackHandler } from 'react-native'
 import UsersContext from '../utils/UserProvider'
 import InputNumber from '../componentes/InputNumber'
 import Btn from '../componentes/Btn'
@@ -9,13 +9,20 @@ import API from '../utils/API'
 import Msg from '../componentes/Msg'
 import ConfirmAddress from '../componentes/ConfirmAddress'
 
-export default function Cpf() {
+export default function Cpf({navigation}) {
     const {users_data, dispatch} = useContext(UsersContext)
     const [seach, setSeach] = useState(false);
     const [state, setState] = useState('')
     const [erro, setErro] = useState('')
     const [checkClientOk, setCheckClientOk] = useState(false);
     const [objClient, setObjClient] = useState([]);
+
+    useEffect(() => {
+        const backAction = () => { BackHandler.exitApp() }
+        const backHandler = BackHandler.addEventListener( "hardwareBackPress", backAction );
+        return () => backHandler.remove();
+    }, []);
+    
 
     function formatCpf(num){
         let formatado = num.replace(/\D+/g, "");
@@ -40,7 +47,7 @@ export default function Cpf() {
     }
 
     function set(type, payload){
-        console.log(`UsersContext: Type: ${type}, Payload: ${payload}`)
+        //console.log(`UsersContext: Type: ${type}, Payload: ${payload}`)
         dispatch({
             type: type,
             payload: payload
@@ -81,7 +88,7 @@ export default function Cpf() {
         }
 
         setObjClient(temp)
-        setTimeout(()=>{ console.log("Passou o tempo"); setCheckClientOk(true) }, 1000) // Precisa desse delay
+        setTimeout(()=>{ setCheckClientOk(true) }, 1000) // Precisa desse delay
     }
 
     async function handleRequisition(num, type){
@@ -139,7 +146,7 @@ export default function Cpf() {
         })
         .catch((e)=>{
             setSeach(false)
-            console.log(e);
+            //console.log(e);
             setErro(`Erro: ${e}`)
         });
     }

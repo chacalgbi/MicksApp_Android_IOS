@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react'
-import { StyleSheet, Text, View, ScrollView, Alert, Image, TouchableOpacity } from 'react-native'
+import React, { useState, useContext, useEffect } from 'react'
+import { StyleSheet, Text, View, ScrollView, Alert, Image, TouchableOpacity, BackHandler, Platform } from 'react-native'
 import logoMicks from '../assets/avatar_micks.png'
 import UsersContext from '../utils/UserProvider'
 import estilo from '../utils/cores'
@@ -11,7 +11,7 @@ import InputSenha from '../componentes/InputSenha'
 import InputNome from '../componentes/InputNome'
 import InputCel from '../componentes/InputCel';
 
-export default function Cadastro() {
+export default function Cadastro({ navigation }) {
     const [seach, setSeach] = useState(false);
     const {users_data, dispatch} = useContext(UsersContext)
     const [userName, setUserName] = useState(users_data.name)
@@ -25,8 +25,14 @@ export default function Cadastro() {
     const [userPassConfirm, setUserPassConfirm] = useState('')
     const [userPassConfirmErr, setUserPassConfirmErr] = useState('')
 
+    useEffect(() => {
+        const backAction = () => { BackHandler.exitApp() }
+        const backHandler = BackHandler.addEventListener( "hardwareBackPress", backAction );
+        return () => backHandler.remove();
+    }, []);
+
     function set(type, payload){
-        console.log(`UsersContext: Type: ${type}, Payload: ${payload}`)
+        //console.log(`UsersContext: Type: ${type}, Payload: ${payload}`)
         dispatch({
             type: type,
             payload: payload
@@ -51,14 +57,10 @@ export default function Cadastro() {
             //console.log(res.data)
             setTimeout(()=>{ setSeach(false) }, 500) 
             
-
             if(res.data.erroGeral){
-                setWarning(res.data.msg)
-
                 if(res.data.erroGeral === 'nao'){
                     if(res.data.dados.errorBD === 'nao'){
                         setTimeout(()=>{ set('setUserAppYes', userEmail) }, 1000) 
-                        
                     }else{
                         Alert.alert('Erro', `${res.data.msg}`)
                     }
@@ -69,7 +71,7 @@ export default function Cadastro() {
         })
         .catch((e)=>{
             setSeach(false)
-            console.log(e);
+            //console.log(e);
             Alert.alert('Erro', `${e}`)
         });
     }
@@ -81,7 +83,7 @@ export default function Cadastro() {
             setUserEmailErr('Email muito curto! Digite um email com pelo menos 10 caracteres.')
         }else if(userEmail.indexOf('@') == -1 || userEmail.indexOf('.') == -1){
             setUserEmailErr('Email inválido! Digite um email válido.')
-        }else if(cel.length < 15){
+        }else if(cel.length < 16){
             setCelErr('Número de telefone inválido! Digite um número com 11 caracteres.')
         }else if(userPass.length < 6){
             setUserPassErr('Senha muito curta! Digite uma senha com pelo menos 6 caracteres.')
@@ -120,8 +122,9 @@ export default function Cadastro() {
                 />
                 <InputCel
                     placeholder='Digite seu telefone'
-                    onChangeText={(v)=>{ 
-                        setCel(v)
+                    mask={"([00]) [0].[0000]-[0000]"}
+                    onChangeText={(formatted, extracted)=>{ 
+                        setCel(formatted)
                         setCelErr('')
                     }}
                     value={cel}
@@ -155,7 +158,7 @@ export default function Cadastro() {
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={()=>{ set('setClearAll', {}) }}>
-                    <Text  style={stl.links}>Novo usuário?</Text>
+                    <Text  style={[stl.links, {marginBottom: 40}]}>Novo usuário?</Text>
                 </TouchableOpacity>
 
             </View>
@@ -190,13 +193,13 @@ const stl = StyleSheet.create({
 		color: estilo.cor.fonte
 	},
     img:{
-        marginTop: 40,
+        marginTop: Platform.OS === 'ios' ? 40 : 10,
 		width: 60,
 		height: 60,
 	},
     links:{
         color: estilo.cor.fonte,
         textDecorationLine: 'underline',
-        paddingTop: 15
+        paddingTop: Platform.OS === 'ios' ? 20 : 8
     },
 });

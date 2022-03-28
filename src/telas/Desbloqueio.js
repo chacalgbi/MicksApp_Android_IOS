@@ -36,13 +36,13 @@ export default function Desbloqueio(props){
                     }else{
                         setWarning("Você possui planos suspensos por débito!")
                         setPlainBlocked(unique)
-                        console.log("Codsercli do plano bloqueado:", unique)
+                        //console.log("Codsercli do plano bloqueado:", unique)
                     }
                 }
             }
         })
         .catch((e)=>{
-            console.log(e);
+            //console.log(e);
             setWarning(e)
         });
     }
@@ -65,7 +65,7 @@ export default function Desbloqueio(props){
                     }
                 })
                 .catch((e)=>{
-                    console.log(e);
+                    //console.log(e);
                     setWarning(e)
                 });
             }

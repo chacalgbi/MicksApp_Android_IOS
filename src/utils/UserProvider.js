@@ -31,6 +31,26 @@ export const UsersProvider = (props) => {
 	}
 
     const acoes = {
+        setUpdate(data, action){
+            setCodSerCli(action.payload.codsercli)
+            setDescriSer(action.payload.descriSer)
+            setLogin(action.payload.login)
+            let contexto1 = {
+                codsercli: action.payload.codsercli,
+                descriSer: action.payload.descriSer,
+                login: action.payload.login,
+
+                userApp: userApp,
+                appLogged: appLogged,
+                clientMicks: clientMicks,
+                codCli: codCli,
+                cliDOC: cliDOC,
+                name: name,
+                email: email,
+                
+            }
+            return contexto1
+        },
         setClientMicksYes(data, action){
             setCliDOC(action.payload.cliDOC)
             setCodCli(action.payload.codCli)
