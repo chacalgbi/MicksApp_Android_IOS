@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { StyleSheet, Text, View, Alert } from 'react-native'
 import UsersContext from '../utils/UserProvider'
 import { Rating } from 'react-native-elements'
@@ -9,12 +9,17 @@ import estilo from '../utils/cores'
 export default function Avalie(props){
     const {users_data, dispatch} = useContext(UsersContext)
     const [seach, setSeach] = useState(false);
+    const [nota, setNota] = useState(0);
+    const [msg, setMsg] = useState('Buscando notas anteriores');
+    const [msg1, setMsg1] = useState('Buscando notas anteriores...');
+    const [pergunta, setPergunta] = useState('Como você avalia o serviço da Micks?');
 
     function showErro(e){
         Alert.alert('Ops!', `${e}`)
     }
 
     async function evaluation(rating){
+        setMsg('Enviando sua avaliação')
         setSeach(true)
         const obj = {
             email: users_data.email,
@@ -38,26 +43,48 @@ export default function Avalie(props){
         });
     }
 
+    async function isGetRating(rating){
+        setSeach(true)
+
+        await API('isGetRating', {email: users_data.email})
+        .then((res)=>{
+            setTimeout(()=>{ setSeach(false) }, 1000)
+            if(res.data.erroGeral){
+                if(res.data.pergunta.length > 10){
+                    setPergunta(res.data.pergunta)
+                }
+                setMsg1(res.data.msg)
+                setNota(res.data.nota)
+            }
+        })
+        .catch((e)=>{
+            showErro(`Erro interno. ${e} `)
+        });
+    }
+
+    useEffect(() => {
+        isGetRating()
+    }, [])
+
     return(
         <View style={stl.formContainer}>
-            <Text style={stl.question}>Como você avalia o serviço da Micks?</Text>
-            <View style={stl.rating}>
-                <Rating
-                    type="custom"
-                    ratingColor="#4460D9"
-                    ratingCount={10}
-                    startingValue={0}
-                    imageSize={32}
-                    onFinishRating={evaluation}
-                    showRating
-                    style={{ paddingVertical: 10 }}
-                />
-            </View>
+            <Text style={stl.question}>{pergunta}</Text>
+            <Rating
+                type="custom"
+                ratingColor="#4460D9"
+                ratingCount={10}
+                startingValue={nota}
+                imageSize={32}
+                onFinishRating={evaluation}
+                showRating
+                style={stl.rating}
+            />
+            <Text style={stl.text}>{msg1}</Text>
 
             <Msg show={seach}
                 showProgress={true}
                 title="Aguarde..."
-                message={'Enviando sua avaliação'}
+                message={msg}
                 confirmButtonColor="#080"
                 showCancelButton={false}
                 showConfirmButton={false}
@@ -84,6 +111,14 @@ const stl = StyleSheet.create({
     },
     rating:{
         marginTop: 30,
-        backgroundColor: '#FFFFFF'
+        borderWidth: 1,
+        borderColor: estilo.cor.icon,
+        borderRadius: 20,
+        padding: 12
+        
+    },
+    text:{
+        marginTop: 30,
+        fontSize: 16,
     }
 });

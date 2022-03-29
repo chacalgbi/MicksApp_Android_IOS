@@ -177,7 +177,7 @@ const stl = StyleSheet.create({
         flex: 8,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 30,
+        marginBottom: 60,
     },
     container: {
         flex: 1,

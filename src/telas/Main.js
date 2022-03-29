@@ -45,13 +45,10 @@ export default function Main({ navigation }) {
 
 	useEffect(() => {
         isGet()
-
         navigation.addListener('beforeRemove', onBeforeRemove) // add ao EventListener a função "onBeforeRemove"
-    
         return function cleanup() {
           navigation.removeListener('beforeRemove', onBeforeRemove) // Ao desmontar o componente, remove o "onBeforeRemove"
         }
-
     }, [navigation])
 
     function set(type, payload){
@@ -94,22 +91,22 @@ export default function Main({ navigation }) {
                 
                 <View style={stl.linha1}>
                     <TouchableOpacity onPress={() => { navigation.navigate('Faturas') }} style={stl.itemMenu} >
-                        <LottieView autoPlay loop={true} style={{width: 100, height: 100}} source={require('../assets/pay1.json')} />
+                        <LottieView autoPlay={true} loop={true} style={{width: 100, height: 100}} source={require('../assets/pay1.json')} />
                         <Text style={stl.labels}>Faturas</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => { navigation.navigate('Extrato') }} style={stl.itemMenu} >
-                        <LottieView autoPlay loop={true} style={{width: 100, height: 100}} source={require('../assets/wifi.json')} />
+                        <LottieView autoPlay={true} loop={true} style={{width: 100, height: 100}} source={require('../assets/wifi.json')} />
                         <Text style={stl.labels}>Extrato de conexão</Text>
                     </TouchableOpacity>
                 </View>
 
                 <View style={stl.linha2}>
                     <TouchableOpacity onPress={() => { navigation.navigate('Desbloqueio') }} style={stl.itemMenu} >
-                        <LottieView autoPlay loop={true} style={{width: 100, height: 100}} source={require('../assets/desbloqueio.json')} />
+                        <LottieView autoPlay={true} loop={true} style={{width: 100, height: 100}} source={require('../assets/desbloqueio.json')} />
                         <Text style={stl.labels}>Desbloqueio provisório</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => { navigation.navigate('Suporte') }} style={stl.itemMenu} >
-                        <LottieView autoPlay loop={true} style={{width: 100, height: 100}} source={require('../assets/suporte1.json')} />
+                        <LottieView autoPlay={true} loop={true} style={{width: 100, height: 100}} source={require('../assets/suporte1.json')} />
                         <Text style={stl.labels}>Conversar com um atendente</Text>
                     </TouchableOpacity>                    
                 </View>

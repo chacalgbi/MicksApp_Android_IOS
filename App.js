@@ -14,6 +14,11 @@ cd android
 ./gradlew assembleDebug
 Lá! você encontrará o arquivo apk no seguinte caminho:
 yourProject/android/app/build/outputs/apk/debug/app-debug.apk
+
+Generating the release AAB
+cd android
+./gradlew bundleRelease
+android/app/build/outputs/bundle/release/app-release.aab
 */
 
 import React, { useState, useContext, useEffect } from 'react'
