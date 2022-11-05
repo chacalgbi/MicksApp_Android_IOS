@@ -4,7 +4,7 @@ import UsersContext from '../utils/UserProvider'
 import InputNumber from '../componentes/InputNumber'
 import Btn from '../componentes/Btn'
 import estilo from '../utils/cores'
-import logoMicks from '../assets/avatar_micks.png'
+import logoMicks from '../assets/logo.png'
 import API from '../utils/API'
 import Msg from '../componentes/Msg'
 import ConfirmAddress from '../componentes/ConfirmAddress'
@@ -231,8 +231,8 @@ const stl = StyleSheet.create({
     },
     img:{
         marginTop: 40,
-		width: 100,
-		height: 100,
+		width: 200,
+		height: 80,
 	},
 	corpo:{
 		flex: 1,
@@ -246,7 +246,8 @@ const stl = StyleSheet.create({
 	},
     subTitle:{
         fontSize: 22,
-		color: estilo.cor.fonte
+		color: estilo.cor.fonte,
+        marginBottom: 15
 	},
     tenhoConta:{
         color: estilo.cor.fonte,

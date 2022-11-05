@@ -11,7 +11,7 @@ export default function Btn(props){
                 <Icon
                     name='whatsapp'
                     size={24}
-                    color={estilo.cor.fonte}
+                    color={estilo.cor.fundo}
                 />
                 <TextInputMask
                     style={stl.font}
@@ -28,18 +28,21 @@ const stl = StyleSheet.create({
     container:{
         flexDirection: 'row',
         flex: 1,
-        width: '95%',
+        width: '94%',
+        height: 47,
         alignItems: 'center',
         justifyContent: 'flex-start',
-        borderBottomWidth: 1,
-        borderColor: '#808080',
-        marginTop: Platform.OS === 'ios' ? 12 : 0
+        backgroundColor: '#FFFFFF',
+        borderRadius: 10,
+        paddingLeft: 10,
+        marginBottom: 10
         
     },
 	font:{
-		color: estilo.cor.fonte,
+		color: estilo.cor.fundo,
         fontSize: 18,
         width: '80%',
+        paddingLeft: 10,
 	},
     erroMsg:{
         fontSize: 12,

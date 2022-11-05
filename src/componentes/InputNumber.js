@@ -8,21 +8,22 @@ export default function Btn(props){
     return(
         <Input
             style={stl.font}
+            inputContainerStyle = {stl.inputBox}
             keyboardType='numeric' 
             {...props}
-            leftIcon={
-            <Icon
-                name='numeric'
-                size={24}
-                color={estilo.cor.fonte}
-            />
-            }
+            leftIcon={ <Icon name='numeric' size={24} color={estilo.cor.fundo} /> }
         />
     )
 }
 
 const stl = StyleSheet.create({
 	font:{
-		color: estilo.cor.fonte
-	}
+		color: estilo.cor.fundo
+	},
+    inputBox:{
+        backgroundColor: '#FFFFFF',
+        borderRadius: 10,
+        paddingLeft: 10
+
+    }
 });

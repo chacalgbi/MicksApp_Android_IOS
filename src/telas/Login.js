@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { StyleSheet, Text, View, ScrollView, Alert, Image, TouchableOpacity, BackHandler, Platform } from 'react-native'
-import logoMicks from '../assets/avatar_micks.png'
+import logoMicks from '../assets/logo.png'
 import UsersContext from '../utils/UserProvider'
 import estilo from '../utils/cores'
 import Btn from '../componentes/Btn'
@@ -201,9 +201,10 @@ const stl = StyleSheet.create({
 		alignItems: 'center', // alinha no sentido horizontal (esquerda e direita)
 	},
 	title:{
-        marginTop: 20,
+        marginTop: 10,
         fontSize: 27,
-		color: estilo.cor.fonte
+		color: estilo.cor.fonte,
+        marginBottom: 15
 	},
     links:{
         color: estilo.cor.fonte,
@@ -212,7 +213,7 @@ const stl = StyleSheet.create({
     },
     img:{
         marginTop: Platform.OS === 'ios' ? 40 : 10,
-		width: 60,
+		width: 200,
 		height: 60,
 	}
 });

@@ -8,6 +8,7 @@ export default function Btn(props){
     return(
         <Input
             style={stl.font}
+            inputContainerStyle = {stl.inputBox}
             keyboardType='default'
             autoCapitalize='none'
             autoCorrect={false}
@@ -17,7 +18,7 @@ export default function Btn(props){
             <Icon
                 name='key-variant'
                 size={24}
-                color={estilo.cor.fonte}
+                color={estilo.cor.fundo}
             />
             }
         />
@@ -26,6 +27,12 @@ export default function Btn(props){
 
 const stl = StyleSheet.create({
 	font:{
-		color: estilo.cor.fonte
-	}
+		color: estilo.cor.fundo
+	},
+    inputBox:{
+        backgroundColor: '#FFFFFF',
+        borderRadius: 10,
+        paddingLeft: 10
+
+    }
 });

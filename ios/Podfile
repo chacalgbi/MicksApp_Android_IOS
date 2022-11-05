@@ -13,9 +13,10 @@ target 'MicksApp' do
   )
 
 
-  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
 
   pod 'React-RCTText', :path => '../node_modules/react-native/Libraries/Text', :modular_headers => true
+
+  pod 'react-native-blob-util', :path => '../node_modules/react-native-blob-util'
 
   target 'MicksAppTests' do
     inherit! :complete
@@ -28,9 +29,15 @@ target 'MicksApp' do
   # you should disable the next line.
   use_flipper!()
 
-
   post_install do |installer|
-    react_native_post_install(installer)
-    __apply_Xcode_12_5_M1_post_install_workaround(installer)
+    installer.pods_project.targets.each do |target|
+      if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
+        target.build_configurations.each do |config|
+            config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
+        end
+      end
+    end
   end
+
+
 end

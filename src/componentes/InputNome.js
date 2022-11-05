@@ -8,13 +8,14 @@ export default function Btn(props){
     return(
         <Input
             style={stl.font}
+            inputContainerStyle = {stl.inputBox}
             keyboardType='default' 
             {...props}
             leftIcon={
             <Icon
                 name='account-plus-outline'
                 size={24}
-                color={estilo.cor.fonte}
+                color={estilo.cor.fundo}
             />
             }
         />
@@ -23,6 +24,12 @@ export default function Btn(props){
 
 const stl = StyleSheet.create({
 	font:{
-		color: estilo.cor.fonte
-	}
+		color: estilo.cor.fundo
+	},
+    inputBox:{
+        backgroundColor: '#FFFFFF',
+        borderRadius: 10,
+        paddingLeft: 10
+    }
+    
 });
