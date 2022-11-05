@@ -111,7 +111,7 @@ export default function Main({ navigation }) {
             <View style={stl.body}>
                 
                 <View style={stl.linha1}>
-                    <TouchableOpacity onPress={() => { navigation.navigate('Faturas') }} style={stl.itemMenu} >
+                    <TouchableOpacity onPress={() => { navigation.navigate('Faturas', {navigation:navigation}) }} style={stl.itemMenu} >
                         <Image style={stl.img} source={minhasFaturas} />
                         <Text style={stl.labels}>Minhas Faturas</Text>
                     </TouchableOpacity>

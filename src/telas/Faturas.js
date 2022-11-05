@@ -11,17 +11,16 @@ import API from '../utils/API'
 import plano from '../assets/plano.png'
 import minhasFaturas from '../assets/minhasFaturas.png'
 
-export default function Faturas() {
+export default function Faturas({ navigation }) {
     const {users_data, dispatch} = useContext(UsersContext)
     const [boletos, setBoletos] = useState([])
     const [warning, setWarning] = useState('')
     const [msg, setMsg] = useState('Buscando suas faturas em nosso sistema')
     const [info, setInfo] = useState(false)
-    const [colorIcon, setColorIcon] = useState('#C0C0C0')
     const [checkFaturaOk, setCheckFaturaOk] = useState(false)
-
     const [codBarra, setCodBarra] = useState()
     const [codPix, setCodPix] = useState()
+    const [qrcode, setQrcode] = useState()
     const [venciFatura, setVenciFatura] = useState()
     const [descriFatura, setDescriFatura] = useState()
     const [linkPdf, setLinkPdf] = useState()
@@ -227,6 +226,11 @@ export default function Faturas() {
                             <Text style={stl.textList2}>Copiar código PIX</Text>
                         </TouchableOpacity>
 
+                        <TouchableOpacity style={stl.item2} onPress={ () => { setCheckFaturaOk(false); navigation.navigate('Qrcode', {qrcode: qrcode}) } } >
+                            <IconMaterial name='cash-fast' size={70} style={{ color: '#191970' }} />
+                            <Text style={stl.textList2}>Ler QrCode PIX</Text>
+                        </TouchableOpacity>
+
                     </View>
                 </KeyboardAvoidingView>
                 <TouchableWithoutFeedback onPress={props.onCancel}><View style={stl.background}></View></TouchableWithoutFeedback>
@@ -271,6 +275,7 @@ export default function Faturas() {
                     setCheckFaturaOk(true)
                     setCodBarra(props.ad.item.codBarra)
                     setCodPix(props.ad.item.codPix)
+                    setQrcode(props.ad.item.qrcode)
                     setVenciFatura(props.ad.item.vencimento)
                     setDescriFatura(props.ad.item.decricao1)
                     setLinkPdf(props.ad.item.linkPDF)
@@ -336,6 +341,12 @@ const stl = StyleSheet.create({
         backgroundColor: estilo.cor.fonte,
         paddingHorizontal: 10
 	},
+    viewQrcode: {
+        flex: 1,
+        backgroundColor: 'white',
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     background:{
         flex: 1,
         backgroundColor: 'rgba(0,0,0,0.5)'

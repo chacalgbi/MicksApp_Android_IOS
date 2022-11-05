@@ -43,6 +43,7 @@ import Desbloqueio from './src/telas/Desbloqueio'
 import Suporte from './src/telas/Suporte'
 import Modificar from './src/telas/Modificar'
 import Avalie from './src/telas/Avalie'
+import Qrcode from './src/telas/Qrcode'
 import Relatar from './src/telas/Relatar'
 import Velocidade from './src/telas/Velocidade'
 import Indique from './src/telas/Indique'
@@ -123,6 +124,7 @@ export default function App() {
 						<Stack.Screen name="Relatar"      component={Relatar}      options={{ headerShown: true,  headerStyle: {backgroundColor: estilo.cor.fundo}, headerTintColor: estilo.cor.fonte, headerTitleStyle:{fontWeight: 'bold'}, title: 'Relatar um problema' }} />
 						<Stack.Screen name="Velocidade"   component={Velocidade}   options={{ headerShown: true,  headerStyle: {backgroundColor: estilo.cor.fundo}, headerTintColor: estilo.cor.fonte, headerTitleStyle:{fontWeight: 'bold'}, title: 'Testar Conexão' }} />
 						<Stack.Screen name="Indique"      component={Indique}      options={{ headerShown: true,  headerStyle: {backgroundColor: estilo.cor.fundo}, headerTintColor: estilo.cor.fonte, headerTitleStyle:{fontWeight: 'bold'}, title: 'Indique um Amigo' }} />
+						<Stack.Screen name="Qrcode"       component={Qrcode}      options={{ headerShown: true,  headerStyle: {backgroundColor: estilo.cor.fundo}, headerTintColor: estilo.cor.fonte, headerTitleStyle:{fontWeight: 'bold'}, title: 'QrCode PIX' }} />
 					</Stack.Navigator>
 				</NavigationContainer>
 			</UsersProvider>
