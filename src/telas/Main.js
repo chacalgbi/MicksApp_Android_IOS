@@ -140,7 +140,7 @@ export default function Main({ navigation }) {
                     </TouchableOpacity>             
                 </View>
 
-                <TouchableOpacity onPress={() => { navigation.navigate('Suporte') }} style={stl.linha3} >
+                <TouchableOpacity onPress={() => { navigation.navigate('Suporte', {urlSuporte: urls[1].link}) }} style={stl.linha3} >
                     <Image style={{width: 70, height: 70 }} source={menu} />
                     <View style={stl.textHelp}>
                         <Text style={stl.labels}>Precisa de ajuda?</Text>
@@ -150,9 +150,9 @@ export default function Main({ navigation }) {
                     <Icon name='comment-arrow-right-outline' size={30} color={estilo.cor.fundo} />
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={() => { console.log('Redes Sociais') }} style={stl.button} >
+                <TouchableOpacity onPress={() => { Linking.openURL(urls[5].link) }} style={stl.button} >
                     <Icon name='instagram' size={30} color={estilo.cor.fonte} />
-                    <Text style={stl.textButton}> SIGA NOSSAS REDES SOCIAIS </Text>
+                    <Text style={stl.textButton}> SIGA-NOS NO INSTAGRAM</Text>
                 </TouchableOpacity>
 
             </View>

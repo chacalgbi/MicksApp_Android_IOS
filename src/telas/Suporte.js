@@ -4,13 +4,14 @@ import { WebView } from 'react-native-webview'
 import UsersContext from '../utils/UserProvider'
 import estilo from '../utils/cores'
 
-export default function Suporte(props){
+export default function Suporte({ route, navigation }){
     const {users_data, dispatch} = useContext(UsersContext)
+    const { urlSuporte } = route.params
 
     return(
         <View style={stl.container}>
             <WebView
-                source={{ uri: 'https://huggy.chat/06a8b0c4-37dc-4377-beda-b5a970b48374' }}
+                source={{ uri: urlSuporte }}
                 style={stl.web}
             />
         </View>

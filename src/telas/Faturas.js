@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Alert, TouchableOpacity, Image, FlatList, Platform, Modal, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native'
-import { Divider } from 'react-native-elements';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons'
 import Clipboard from '@react-native-clipboard/clipboard'
 import Share from 'react-native-share'
@@ -218,6 +217,16 @@ export default function Faturas() {
                             <Text style={stl.textList2}>Fazer download do boleto</Text>
                         </TouchableOpacity>
 
+                        <TouchableOpacity style={stl.item2} onPress={ async()=>{ Clipboard.setString(`${codBarra}`); Alert.alert('Códido de barras copiado!', 'Abra seu App de pagamento e cole o código de barras!') } } >
+                            <IconMaterial name='barcode' size={70} style={{ color: '#191970' }} />
+                            <Text style={stl.textList2}>Copiar código de barras</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={stl.item2} onPress={ async()=>{ Clipboard.setString(`${codPix}`); Alert.alert('Códido PIX copiado!', 'Abra seu App de pagamento e cole o código do PIX!') } } >
+                            <IconMaterial name='cash-fast' size={70} style={{ color: '#191970' }} />
+                            <Text style={stl.textList2}>Copiar código PIX</Text>
+                        </TouchableOpacity>
+
                     </View>
                 </KeyboardAvoidingView>
                 <TouchableWithoutFeedback onPress={props.onCancel}><View style={stl.background}></View></TouchableWithoutFeedback>
@@ -274,7 +283,7 @@ export default function Faturas() {
                 <View style={stl.viewBoletos1}>
                     <Text style={stl.textList}>Vencimento: {props.ad.item.vencimento}</Text>
                     <Text style={stl.textList}>Valor: R${props.ad.item.valor_a_pagar}</Text>
-                    <Text style={stl.infor}>Você tem faturas vencidas a 3 dias{information(props.ad.item.dias_vencidos)}</Text>
+                    <Text style={stl.infor}>{information(props.ad.item.dias_vencidos)}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -295,16 +304,16 @@ export default function Faturas() {
                 </View>
             </View>
 
-            <View style={{justifyContent: 'flex-start', alignItems: 'center',}}>
-                <Text style={stl.subtitle}>Alerta, boleto não encontrado{warning}</Text>
-            </View>
-
             <FlatList 
                 data={boletos}
                 keyExtractor={item => `${Math.floor(Math.random() * 65536)}`}
                 renderItem={(obj)=> <ListBoletos ad={obj} /> }
                 listEmptyComponent={()=>{ <ListEmpty /> }}
             />
+
+            <View style={{justifyContent: 'flex-start', alignItems: 'center',}}>
+                <Text style={stl.subtitle}>{warning}</Text>
+            </View>
 
             <Msg 
                 show={info}
@@ -332,7 +341,7 @@ const stl = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.5)'
     },
     key:{
-        flex: 5
+        flex: 6
     },
     container:{
         flex: 1,
@@ -349,30 +358,24 @@ const stl = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'flex-start',
         paddingTop: 10,
-        //justifyContent: 'flex-start', // alinhar no sentido vertical (em cima e embaixo)
-        //alignItems: 'center', // alinha no sentido horizontal (esquerda e direita)
         borderWidth: 1,
         borderColor: '#002171',
         borderRadius: 10,
         marginTop: 15,
         marginRight: Platform.OS === 'ios' ? 20 : 10,
-        marginLeft: Platform.OS === 'ios' ? 20 : 10,
-        //height: 130
+        marginLeft: Platform.OS === 'ios' ? 20 : 10
     },
     item2:{
-        height: 90,
+        height: Platform.OS === 'ios' ? 90 : 70,
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         alignItems: 'center',
-        padding: 10,
-        //justifyContent: 'flex-start', // alinhar no sentido vertical (em cima e embaixo)
-        //alignItems: 'center', // alinha no sentido horizontal (esquerda e direita)
+        padding: 5,
         borderWidth: 1,
         borderColor: '#002171',
         borderRadius: 10,
         marginTop: 15,
-        margin: Platform.OS === 'ios' ? 20 : 10,
-        //height: 130
+        margin: 15
     },
     viewTitulo:{
         backgroundColor: estilo.cor.fundo,
@@ -396,7 +399,7 @@ const stl = StyleSheet.create({
         marginTop: 10
     },
     subtitle:{
-        color: estilo.cor.fundo,
+        color: "#FF0000",
         fontSize: 18
     },
     viewBoletos1:{
@@ -443,19 +446,4 @@ const stl = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-});
-
-/*
-                    <TouchableOpacity onPress={ ()=>{ downloadPdf() }} >
-                        <IconMaterial name='download' size={50} style={{ marginLeft: 5, color: colorIcon }} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={ async()=>{ Clipboard.setString(`${props.ad.item.codBarra}`); Alert.alert('Códido de barras copiado!', 'Abra seu App de pagamento e cole o código de barras!') }} >
-                        <IconMaterial name='barcode'  size={50} style={{ marginLeft: 5, color: colorIcon }} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={ async()=>{ Clipboard.setString(`${props.ad.item.codBarra}`); Alert.alert('Códido PIX copiado!', 'Abra seu App de pagamento e cole o código PIX!') }} >
-                        <IconMaterial name='cash-fast'  size={50} style={{ marginLeft: 5, marginRight: 5, color: colorIcon }} />
-                    </TouchableOpacity>
-
-                    <Text style={stl.infor}>{props.ad.item.decricao1}</Text>
-
-*/
+})
