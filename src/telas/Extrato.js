@@ -74,7 +74,7 @@ export default function Extrato(props){
         .then((res)=>{
             if(res.data.erroGeral){
                 setWarning(res.data.msg)
-                setTimeout(() => { setSeach(false) }, 500);
+                setTimeout(() => { setSeach(false) }, 1000);
 
                 if(res.data.erroGeral === 'nao'){
                     setTotal(`Total Download: ${res.data.totalDo}  Total Upload: ${res.data.totalUp}`)
@@ -94,8 +94,8 @@ export default function Extrato(props){
     return(
         <SafeAreaView style={{flex: 1, width: '100%', backgroundColor: estilo.cor.fundo}}>
             <View style={stl.body}>
-                <Text style={{fontWeight: 'bold', fontSize: 18, marginBottom: 7, color: estilo.cor.fonte }}>{warning}</Text>
-                <Text style={{fontWeight: 'bold', fontSize: 16, marginBottom: 7, color: estilo.cor.fonte }}>{namePlain}</Text>
+                <Text style={{fontWeight: 'bold', fontSize: 18, marginBottom: 7, color: estilo.cor.fundo }}>{warning}</Text>
+                <Text style={{fontWeight: 'bold', fontSize: 16, marginBottom: 7, color: estilo.cor.fundo }}>{namePlain}</Text>
                 <Text style={{fontWeight: 'bold', fontSize: 13, marginBottom: 7, color: 'tomato'}}>{total}</Text>
 
                 <FlatList 
@@ -105,11 +105,11 @@ export default function Extrato(props){
                 />
             </View>
             <TouchableOpacity onPress={ ()=>{ setIsVisible(true)} } style={stl.img}>
-                <IconMaterial name='plus-circle' size={70} style={{color: estilo.cor.icon}} />
+                <IconMaterial name='plus-circle' size={50} style={{color: estilo.cor.fonte}} />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={ ()=>{ setDaysVisible(true)} } style={stl.img1}>
-                <IconMaterial name='calendar-clock' size={70} style={{color: estilo.cor.icon}} />
+                <IconMaterial name='calendar-clock' size={50} style={{color: estilo.cor.fonte}} />
             </TouchableOpacity>
 
             <BottomSheet modalProps={{}} isVisible={isVisible}>
@@ -150,7 +150,7 @@ export default function Extrato(props){
 const stl = StyleSheet.create({
     conectionList:{
         flex: 1,
-        backgroundColor: 'rgba(68, 96, 217, 0.2)',
+        backgroundColor: estilo.cor.fundo,
         padding: 5,
         borderRadius: 15,
         marginBottom: 10
@@ -158,26 +158,27 @@ const stl = StyleSheet.create({
     img:{
         position: 'absolute',
         right: 10,
-        bottom: 5,
-        width: 80,
-        height: 80,
+        bottom: 1,
+        width: 50,
+        height: 50,
         justifyContent: 'center',
         alignItems: 'center'
     },
     img1:{
         position: 'absolute',
         left: 10,
-        bottom: 5,
-        width: 80,
-        height: 80,
+        bottom: 1,
+        width: 50,
+        height: 50,
         justifyContent: 'center',
         alignItems: 'center'
     },
     body:{
         flex: 8,
+        backgroundColor: estilo.cor.fonte,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 60,
+        marginBottom: 50,
     },
     container: {
         flex: 1,
@@ -190,11 +191,11 @@ const stl = StyleSheet.create({
         margin: 20
     },
     subtitle:{
-        color: estilo.cor.fonte,
+        color: estilo.cor.fundo,
         fontSize: 14,
     },
     warning:{
-        color: estilo.cor.fonte,
+        color: estilo.cor.fundo,
         fontSize: 15,
     },
     viewBoletos1:{
@@ -206,12 +207,12 @@ const stl = StyleSheet.create({
         backgroundColor: 'red',
     },
     textList:{
-        color: estilo.cor.fonte,
+        color: estilo.cor.fundo,
         fontSize: 20,
 
     },
     textModal:{
-        color: estilo.cor.fonte,
+        color: estilo.cor.fundo,
         fontSize: 16,
         padding: 3,
         marginLeft: 5
@@ -226,7 +227,7 @@ const stl = StyleSheet.create({
         color: estilo.cor.fonte,
     },
     itemBody:{
-        color: estilo.cor.item,
-        fontSize: 15,
+        color: estilo.cor.fonte,
+        fontSize: 13,
     }
 })

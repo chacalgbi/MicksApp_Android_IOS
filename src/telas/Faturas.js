@@ -24,6 +24,7 @@ export default function Faturas({ navigation }) {
     const [venciFatura, setVenciFatura] = useState()
     const [descriFatura, setDescriFatura] = useState()
     const [linkPdf, setLinkPdf] = useState()
+    const [valor, setValor] = useState()
     
 
     function ListEmpty(){
@@ -204,11 +205,8 @@ export default function Faturas({ navigation }) {
                             </View>
                             <View>
                                 <Text style={stl.textMenu}>{venciFatura}</Text>
+                                <Text style={stl.subtitle}>{descriFatura}</Text>
                             </View>
-                        </View>
-                        
-                        <View style={{justifyContent: 'flex-start', alignItems: 'center',}}>
-                            <Text style={stl.subtitle}>{descriFatura}</Text>
                         </View>
 
                         <TouchableOpacity style={stl.item2} onPress={ ()=>{ downloadPdf() }} >
@@ -226,8 +224,8 @@ export default function Faturas({ navigation }) {
                             <Text style={stl.textList2}>Copiar código PIX</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={stl.item2} onPress={ () => { setCheckFaturaOk(false); navigation.navigate('Qrcode', {qrcode: qrcode}) } } >
-                            <IconMaterial name='cash-fast' size={70} style={{ color: '#191970' }} />
+                        <TouchableOpacity style={stl.item2} onPress={ () => { setCheckFaturaOk(false); navigation.navigate('Qrcode', {qrcode: qrcode, vencimento: venciFatura, valor: valor}) } } >
+                            <IconMaterial name='qrcode-scan' size={50} style={{ color: '#191970' }} />
                             <Text style={stl.textList2}>Ler QrCode PIX</Text>
                         </TouchableOpacity>
 
@@ -279,6 +277,7 @@ export default function Faturas({ navigation }) {
                     setVenciFatura(props.ad.item.vencimento)
                     setDescriFatura(props.ad.item.decricao1)
                     setLinkPdf(props.ad.item.linkPDF)
+                    setValor(props.ad.item.valor_a_pagar)
                 }} 
                 style={stl.item}
             >
@@ -377,16 +376,15 @@ const stl = StyleSheet.create({
         marginLeft: Platform.OS === 'ios' ? 20 : 10
     },
     item2:{
-        height: Platform.OS === 'ios' ? 90 : 70,
+        height: Platform.OS === 'ios' ? 80 : 65,
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',
-        padding: 5,
+        padding: 4,
         borderWidth: 1,
         borderColor: '#002171',
         borderRadius: 10,
-        marginTop: 15,
-        margin: 15
+        margin: Platform.OS === 'ios' ? 15 : 8
     },
     viewTitulo:{
         backgroundColor: estilo.cor.fundo,
@@ -396,8 +394,8 @@ const stl = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#002171',
         borderRadius: 10,
-        margin: Platform.OS === 'ios' ? 20 : 10,
-        height: 110
+        margin: Platform.OS === 'ios' ? 10 : 8,
+        height: Platform.OS === 'ios' ? 100 : 90
     },
     boletos:{
         width: '100%',
@@ -410,8 +408,8 @@ const stl = StyleSheet.create({
         marginTop: 10
     },
     subtitle:{
-        color: "#FF0000",
-        fontSize: 18
+        color: estilo.cor.fonte,
+        fontSize: 12
     },
     viewBoletos1:{
         flex: 3,

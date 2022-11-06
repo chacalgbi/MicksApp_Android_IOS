@@ -84,6 +84,10 @@ export default function Desbloqueio(props){
                 <Btn title={buttonText} func={ ()=>{ solicitar() } } />
             </View>
 
+            <View style={stl.body2}>
+                
+            </View>
+
             <Msg show={seach}
                 showProgress={true}
                 title="Aguarde..."
@@ -104,6 +108,12 @@ const stl = StyleSheet.create({
     body:{
         backgroundColor: estilo.cor.fundo,
         flex: 1,
+        justifyContent: "flex-start",
+        alignItems: 'center',
+    },
+    body2:{
+        backgroundColor: estilo.cor.fundo,
+        flex: 2,
         justifyContent: "flex-start",
         alignItems: 'center',
     },
