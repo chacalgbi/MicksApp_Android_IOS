@@ -55,9 +55,10 @@ export default function Relatar() {
             }
         })
         .catch((e)=>{
-            console.log(e);
+            console.log(e)
+            setSeach(false)
             showErro(`${e}`)
-        });
+        })
     }
 
     function checkForm(){

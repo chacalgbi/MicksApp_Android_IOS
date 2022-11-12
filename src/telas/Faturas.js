@@ -11,7 +11,7 @@ import API from '../utils/API'
 import plano from '../assets/plano.png'
 import minhasFaturas from '../assets/minhasFaturas.png'
 
-export default function Faturas({ navigation }) {
+export default function Faturas(props) {
     const {users_data, dispatch} = useContext(UsersContext)
     const [boletos, setBoletos] = useState([])
     const [warning, setWarning] = useState('')
@@ -20,11 +20,9 @@ export default function Faturas({ navigation }) {
     const [checkFaturaOk, setCheckFaturaOk] = useState(false)
     const [codBarra, setCodBarra] = useState()
     const [codPix, setCodPix] = useState()
-    const [qrcode, setQrcode] = useState()
     const [venciFatura, setVenciFatura] = useState()
     const [descriFatura, setDescriFatura] = useState()
     const [linkPdf, setLinkPdf] = useState()
-    const [valor, setValor] = useState()
     
 
     function ListEmpty(){
@@ -224,11 +222,6 @@ export default function Faturas({ navigation }) {
                             <Text style={stl.textList2}>Copiar código PIX</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={stl.item2} onPress={ () => { setCheckFaturaOk(false); navigation.navigate('Qrcode', {qrcode: qrcode, vencimento: venciFatura, valor: valor}) } } >
-                            <IconMaterial name='qrcode-scan' size={50} style={{ color: '#191970' }} />
-                            <Text style={stl.textList2}>Ler QrCode PIX</Text>
-                        </TouchableOpacity>
-
                     </View>
                 </KeyboardAvoidingView>
                 <TouchableWithoutFeedback onPress={props.onCancel}><View style={stl.background}></View></TouchableWithoutFeedback>
@@ -268,16 +261,12 @@ export default function Faturas({ navigation }) {
 
         return(
             <TouchableOpacity onPress={ ()=>{
-                    //console.log("Começou aqui")
-                    //console.log(props.ad.item.vencimento)
                     setCheckFaturaOk(true)
                     setCodBarra(props.ad.item.codBarra)
                     setCodPix(props.ad.item.codPix)
-                    setQrcode(props.ad.item.qrcode)
                     setVenciFatura(props.ad.item.vencimento)
                     setDescriFatura(props.ad.item.decricao1)
                     setLinkPdf(props.ad.item.linkPDF)
-                    setValor(props.ad.item.valor_a_pagar)
                 }} 
                 style={stl.item}
             >
@@ -376,7 +365,7 @@ const stl = StyleSheet.create({
         marginLeft: Platform.OS === 'ios' ? 20 : 10
     },
     item2:{
-        height: Platform.OS === 'ios' ? 80 : 65,
+        height: Platform.OS === 'ios' ? 80 : 75,
         flexDirection: 'row',
         justifyContent: 'space-around',
         alignItems: 'center',

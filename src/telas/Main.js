@@ -24,9 +24,7 @@ export default function Main({ navigation }) {
     const [exit, setExit] = useState(false)
     const {users_data, dispatch} = useContext(UsersContext)
     const [menuVisible, setMenuVisible] = useState(false)
-    const [open, setOpen] = useState(false)
     const [urls, setUrls] = useState([])
-    const [planos, setPlanos] = useState(0)
     const [urlLojaMicksTV, setUrlLojaMicksTV] = useState('')
 
     const nameClient = users_data.name.split(' ')
@@ -42,7 +40,6 @@ export default function Main({ navigation }) {
 		await API('isgetapp', { email: users_data.email, doc: users_data.cliDOC })
 		.then((res)=>{
             setTimeout(()=>{
-                setPlanos(res.data.dados.ativos)
                 setUrls(res.data.urls)
                 set('setUpdate', {
                     codsercli: res.data.dados.codsercli,
@@ -58,9 +55,8 @@ export default function Main({ navigation }) {
             
 		})
 		.catch((e)=>{
-			//console.log(e);
             Alert.alert('Erro', `${e}`)
-		});
+		})
 	}
 
     function onBeforeRemove(e){
@@ -86,7 +82,6 @@ export default function Main({ navigation }) {
 
     function getLogin(){
         setConfirm(false)
-        setOpen(false)
         navigation.removeListener('beforeRemove', onBeforeRemove)
         setTimeout(()=>{ 
             set('jaTenhoConta', {})
@@ -111,7 +106,7 @@ export default function Main({ navigation }) {
             <View style={stl.body}>
                 
                 <View style={stl.linha1}>
-                    <TouchableOpacity onPress={() => { navigation.navigate('Faturas', {navigation:navigation}) }} style={stl.itemMenu} >
+                    <TouchableOpacity onPress={() => { navigation.navigate('Faturas') }} style={stl.itemMenu} >
                         <Image style={stl.img} source={minhasFaturas} />
                         <Text style={stl.labels}>Minhas Faturas</Text>
                     </TouchableOpacity>
@@ -176,7 +171,7 @@ export default function Main({ navigation }) {
                 confirmButtonColor="#4460D9"
                 showCancelButton={true}
                 showConfirmButton={true}
-                onCancelPressed ={() => { setConfirm(false); setOpen(false); }}
+                onCancelPressed ={() => { setConfirm(false) }}
                 onConfirmPressed={() => { getLogin() }}
             />
 
@@ -319,27 +314,4 @@ const stl = StyleSheet.create({
         color: estilo.cor.item,
         margin: 15
     }
-});
-
-/*
-                <ImageSlider 
-                    data={urls}
-                    autoPlay={true}
-                    timer={6000}
-                    caroselImageStyle={{height: '100%'}} // Carrocel
-                    onClick={(item, index)=> { Linking.openURL(urls[index].link) }}
-                    closeIconColor="#fff"
-                    indicatorContainerStyle={{top: 1}}
-                    //caroselImageContainerStyle={{borderWidth: 2, borderColor: '#FF0000' }} // Carrocel
-                    //previewImageContainerStyle={{borderWidth: 2, borderColor: '#FFFFFF' }} // Imagem Aberta
-                    //previewImageStyle={{ flex: 1, resizeMode: 'contain' }} // Imagem Abertas
-                />
-
-
-<LottieView autoPlay={true} loop={true} style={{width: 100, height: 100}} source={require('../assets/pay1.json')} />
-<LottieView autoPlay={true} loop={true} style={{width: 100, height: 100}} source={require('../assets/wifi.json')} />
-<LottieView autoPlay={true} loop={true} style={{width: 100, height: 100}} source={require('../assets/desbloqueio.json')} />
-<LottieView autoPlay={true} loop={true} style={{width: 100, height: 100}} source={require('../assets/suporte1.json')} />
-
-<Text style={stl.planosAtivos}>Planos ativos: {planos}</Text>
-*/
+})

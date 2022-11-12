@@ -23,12 +23,12 @@ cd android
 android/app/build/outputs/bundle/release/app-release.aab
 */
 
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import SplashScreen from 'react-native-splash-screen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, BackHandler } from 'react-native'
+import { Image, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import { UsersProvider } from './src/utils/UserProvider'
 import UsersContext from './src/utils/UserProvider'
 import LottieView from 'lottie-react-native'
@@ -43,12 +43,10 @@ import Desbloqueio from './src/telas/Desbloqueio'
 import Suporte from './src/telas/Suporte'
 import Modificar from './src/telas/Modificar'
 import Avalie from './src/telas/Avalie'
-import Qrcode from './src/telas/Qrcode'
 import Relatar from './src/telas/Relatar'
 import Velocidade from './src/telas/Velocidade'
 import Indique from './src/telas/Indique'
 import estilo from "./src/utils/cores"
-import info from './src/utils/info'
 import MMKVStorage, { useMMKVStorage } from "react-native-mmkv-storage";
 import messaging from '@react-native-firebase/messaging';
 
@@ -70,7 +68,7 @@ function Splash({ navigation }) {
 		}
 	}
 
-	setTimeout(()=>{ decidir() }, 600)
+	setTimeout(()=>{ decidir() }, 800)
 
 	return (
 		<TouchableOpacity style={stl.corpo} >
@@ -124,7 +122,6 @@ export default function App() {
 						<Stack.Screen name="Relatar"      component={Relatar}      options={{ headerShown: true,  headerStyle: {backgroundColor: estilo.cor.fundo}, headerTintColor: estilo.cor.fonte, headerTitleStyle:{fontWeight: 'bold'}, title: 'Relatar um Problema' }} />
 						<Stack.Screen name="Velocidade"   component={Velocidade}   options={{ headerShown: true,  headerStyle: {backgroundColor: estilo.cor.fundo}, headerTintColor: estilo.cor.fonte, headerTitleStyle:{fontWeight: 'bold'}, title: 'Testar Conexão' }} />
 						<Stack.Screen name="Indique"      component={Indique}      options={{ headerShown: true,  headerStyle: {backgroundColor: estilo.cor.fundo}, headerTintColor: estilo.cor.fonte, headerTitleStyle:{fontWeight: 'bold'}, title: 'Indique um Amigo' }} />
-						<Stack.Screen name="Qrcode"       component={Qrcode}      options={{ headerShown: true,  headerStyle: {backgroundColor: estilo.cor.fundo}, headerTintColor: estilo.cor.fonte, headerTitleStyle:{fontWeight: 'bold'}, title: 'QrCode PIX' }} />
 					</Stack.Navigator>
 				</NavigationContainer>
 			</UsersProvider>
@@ -143,7 +140,7 @@ const stl = StyleSheet.create({
 		justifyContent: 'center', // alinhar no sentido vertical (em cima e embaixo)
 		alignItems: 'center', // alinha no sentido horizontal (esquerda e direita)
 	}
-});
+})
 
 // #03CCD3 azul claro (do 1° app)
 // #9BB5F2 azul médio (app novo)

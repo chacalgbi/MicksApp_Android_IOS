@@ -28,7 +28,7 @@ export default function Avalie(props){
 
         await API('evaluation', obj)
         .then((res)=>{
-            setTimeout(()=>{ setSeach(false) }, 1000)
+            setTimeout(()=>{ setSeach(false) }, 500)
             if(res.data.erroGeral){
                 if(res.data.erroGeral === 'nao'){
                     Alert.alert('Sucesso!', 'Sua avaliação foi salva!')
@@ -38,7 +38,7 @@ export default function Avalie(props){
             }
         })
         .catch((e)=>{
-            console.log(e);
+            console.log(e)
             showErro('Erro interno, tente novamente mais tarde')
         });
     }
@@ -92,7 +92,7 @@ export default function Avalie(props){
                 onConfirmPressed={() => { console.log('Clicou em OK') }}
             />
         </View>
-    );
+    )
 
 };
 
@@ -102,12 +102,12 @@ const stl = StyleSheet.create({
         width: '100%',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: estilo.cor.fundo
+        backgroundColor: estilo.cor.fonte
     },
     question:{
         margin: 20,
         fontSize: 20,
-        color: estilo.cor.fonte
+        color: estilo.cor.fundo
     },
     rating:{
         marginTop: 30,

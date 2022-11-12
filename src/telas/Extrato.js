@@ -1,27 +1,26 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, TouchableWithoutFeedback, KeyboardAvoidingView, Modal, FlatList, SafeAreaView } from 'react-native';
 import { BottomSheet, ListItem } from 'react-native-elements';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons'
 import UsersContext from '../utils/UserProvider'
 import estilo from '../utils/cores'
 import Msg from '../componentes/Msg'
 import API from '../utils/API'
+import plano from '../assets/plano.png'
 
 export default function Extrato(props){
     const {users_data, dispatch} = useContext(UsersContext)
-    const [isVisible, setIsVisible] = useState(false);
-    const [daysVisible, setDaysVisible] = useState(false);
-    const [seach, setSeach] = useState(false);
-    const [namePlain, setNamePlain] = useState('');
-    const [numDays, SetDays] = useState(30);
-    const [conections, SetConections] = useState([]);
-    const [warning, setWarning] = useState('Clique em + e selecione seu plano');
-    const [total, setTotal] = useState('');
+    const [isVisible, setIsVisible] = useState(true)
+    const [daysVisible, setDaysVisible] = useState(false)
+    const [seach, setSeach] = useState(false)
+    const [namePlain, setNamePlain] = useState('')
+    const [numDays, SetDays] = useState(30)
+    const [conections, SetConections] = useState([])
+    const [warning, setWarning] = useState('')
+    const [total, setTotal] = useState('')
 
     const plans = users_data.descriSer.split(',')
     const login = users_data.login.split(',')
-    const list = []
-
 
     const listDays = [
         {title: `Escolha a quantidade de dias`, containerStyle: { backgroundColor: '#4F4F4F' }, titleStyle: { color: 'white' }},
@@ -34,9 +33,34 @@ export default function Extrato(props){
         { title: 'Fechar', containerStyle: { backgroundColor: 'red' }, titleStyle: { color: 'white' }, onPress: () => setDaysVisible(false) }
     ]
 
-    list.push({title: `Escolha o plano`, containerStyle: { backgroundColor: '#4F4F4F' }, titleStyle: { color: 'white' }})
-    plans.map((item, index)=>{ list.push({title: `${item}`, onPress: ()=>{ getExtract(login[index], item) }}) })
-    list.push({ title: 'Fechar', containerStyle: { backgroundColor: 'red' }, titleStyle: { color: 'white' }, onPress: () => setIsVisible(false) })
+    function SetPlan(props){
+        return(
+            <Modal transparent={true} visible={props.isVisible} onRequestClose={props.onCancel} animationType='slide'>
+                <TouchableWithoutFeedback onPress={props.onCancel}><View style={stl.background}></View></TouchableWithoutFeedback>
+                <KeyboardAvoidingView behavior="padding" style={stl.key}>
+                    <View style={stl.container1}>
+
+                        <View style={stl.viewTitulo}>
+                            <Text style={stl.textMenu}>Escolha seu plano</Text>
+                        </View>
+
+                        <FlatList 
+                            data={plans}
+                            keyExtractor={item => `${Math.floor(Math.random() * 65536)}`}
+                            renderItem={(obj)=> 
+                                <TouchableOpacity style={stl.item2} onPress={ ()=>{ getExtract(login[obj.index], obj.item) }} >
+                                    <Image style={stl.img2} source={plano} />
+                                    <Text style={stl.textList2}>{obj.item}</Text>
+                                </TouchableOpacity>
+                            }
+                        />
+
+                    </View>
+                </KeyboardAvoidingView>
+                <TouchableWithoutFeedback onPress={props.onCancel}><View style={stl.background}></View></TouchableWithoutFeedback>
+            </Modal>
+        )
+    }    
 
     function ConectionList(props){
         return(
@@ -65,34 +89,41 @@ export default function Extrato(props){
         )
     }
 
-    async function getExtract(login, plain){
+    function getExtract(login, plain){
         setNamePlain(plain)
         setSeach(true)
         setIsVisible(false)
         
-        await API('conection', { login: login, dias: numDays })
-        .then((res)=>{
-            if(res.data.erroGeral){
-                setWarning(res.data.msg)
-                setTimeout(() => { setSeach(false) }, 1000);
-
-                if(res.data.erroGeral === 'nao'){
-                    setTotal(`Total Download: ${res.data.totalDo}  Total Upload: ${res.data.totalUp}`)
-                    SetConections(res.data.dados)
-                }else{
+        setTimeout(async () => {
+            await API('conection', { login: login, dias: numDays })
+            .then((res)=>{
+                if(res.data.erroGeral){
                     setWarning(res.data.msg)
+                    
+                    if(res.data.erroGeral === 'nao'){
+                        setTotal(`Total Download: ${res.data.totalDo}  Total Upload: ${res.data.totalUp}`)
+                        SetConections(res.data.dados)
+                    }else{
+                        setWarning(res.data.msg)
+                    }
                 }
-            }
-        })
-        .catch((e)=>{
-            setWarning(e)
-            //console.log(e)
-            setTimeout(() => { setSeach(false) }, 500);
-        });
+                setTimeout(() => { setSeach(false) }, 1000)
+            })
+            .catch((e)=>{
+                setWarning(e)
+                //console.log(e)
+                setTimeout(() => { setSeach(false) }, 1000)
+            })
+
+        }, 500)
     }
 
     return(
         <SafeAreaView style={{flex: 1, width: '100%', backgroundColor: estilo.cor.fundo}}>
+            {
+                isVisible && <SetPlan isVisible={isVisible} onCancel={()=>{ setIsVisible(false) }} />
+            }
+
             <View style={stl.body}>
                 <Text style={{fontWeight: 'bold', fontSize: 18, marginBottom: 7, color: estilo.cor.fundo }}>{warning}</Text>
                 <Text style={{fontWeight: 'bold', fontSize: 16, marginBottom: 7, color: estilo.cor.fundo }}>{namePlain}</Text>
@@ -111,16 +142,6 @@ export default function Extrato(props){
             <TouchableOpacity onPress={ ()=>{ setDaysVisible(true)} } style={stl.img1}>
                 <IconMaterial name='calendar-clock' size={50} style={{color: estilo.cor.fonte}} />
             </TouchableOpacity>
-
-            <BottomSheet modalProps={{}} isVisible={isVisible}>
-                {list.map((l, i) => (
-                    <ListItem key={i} containerStyle={l.containerStyle} onPress={l.onPress} >
-                        <ListItem.Content>
-                            <ListItem.Title style={l.titleStyle}>{l.title}</ListItem.Title>
-                        </ListItem.Content>
-                    </ListItem>
-                ))}
-            </BottomSheet>
 
             <BottomSheet modalProps={{}} isVisible={daysVisible}>
                 {listDays.map((l, i) => (
@@ -155,6 +176,34 @@ const stl = StyleSheet.create({
         borderRadius: 15,
         marginBottom: 10
     },
+    textList2:{
+        color: estilo.cor.fundo,
+        fontSize: 15,
+        fontWeight: 'bold',
+    },
+    background:{
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)'
+    },
+    key:{
+        flex: 4
+    },
+    viewTitulo:{
+        backgroundColor: estilo.cor.fundo,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#002171',
+        borderRadius: 10,
+        margin: Platform.OS === 'ios' ? 10 : 8,
+        height: Platform.OS === 'ios' ? 80 : 70
+    },
+    textMenu:{
+        color: estilo.cor.fonte,
+        fontSize: 22,
+        fontWeight: 'bold',
+    },
     img:{
         position: 'absolute',
         right: 10,
@@ -173,6 +222,11 @@ const stl = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    img2:{
+		width: 50,
+		height: 50,
+        marginRight: 6
+	},
     body:{
         flex: 8,
         backgroundColor: estilo.cor.fonte,
@@ -184,6 +238,10 @@ const stl = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
+    },
+    container1:{
+        flex: 1,
+        backgroundColor: '#FFF'
     },
     title:{
         color: '#000000',
@@ -229,5 +287,16 @@ const stl = StyleSheet.create({
     itemBody:{
         color: estilo.cor.fonte,
         fontSize: 13,
-    }
+    },
+    item2:{
+        height: Platform.OS === 'ios' ? 80 : 65,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        padding: 4,
+        borderWidth: 1,
+        borderColor: '#002171',
+        borderRadius: 10,
+        margin: Platform.OS === 'ios' ? 15 : 8
+    },
 })
