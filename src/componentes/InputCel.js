@@ -45,8 +45,8 @@ const stl = StyleSheet.create({
         paddingLeft: 10,
 	},
     erroMsg:{
-        fontSize: 12,
-        color: '#FF0000',
+        fontSize: 17,
+        color: '#FF6347',
         justifyContent: 'flex-start',
         marginLeft: 10,
         marginRight: 10

@@ -107,7 +107,7 @@ export default function Cadastro({ navigation }) {
                         setUserNameErr('')
                      }}
                     value={userName}
-                    errorStyle={{ color: 'red' }}
+                    errorStyle={{fontSize: 17, color:'#FF6347'}}
                     errorMessage={userNameErr}
                 />
                 <InputEmail
@@ -117,7 +117,7 @@ export default function Cadastro({ navigation }) {
                         setUserEmailErr('')
                     }}
                     value={userEmail}
-                    errorStyle={{ color: 'red' }}
+                    errorStyle={{fontSize: 17, color:'#FF6347'}}
                     errorMessage={userEmailErr}
                 />
                 <InputCel
@@ -128,7 +128,6 @@ export default function Cadastro({ navigation }) {
                         setCelErr('')
                     }}
                     value={cel}
-                    errorStyle={{ color: 'red' }}
                     errorMessage={celErr}
                 />
                 <InputSenha
@@ -138,7 +137,7 @@ export default function Cadastro({ navigation }) {
                         setUserPassErr('')
                     }}
                     value={userPass}
-                    errorStyle={{ color: 'red' }}
+                    errorStyle={{fontSize: 17, color:'#FF6347'}}
                     errorMessage={userPassErr}
                 />
                 <InputSenha
@@ -148,7 +147,7 @@ export default function Cadastro({ navigation }) {
                         setUserPassConfirmErr('')
                     }}
                     value={userPassConfirm}
-                    errorStyle={{ color: 'red' }}
+                    errorStyle={{fontSize: 17, color:'#FF6347'}}
                     errorMessage={userPassConfirmErr}
                 />
                 <Btn title="Cadastrar" func={ ()=>{ checkForm() } } />
@@ -194,8 +193,9 @@ const stl = StyleSheet.create({
 		color: estilo.cor.fonte
 	},
     img:{
-        marginTop: Platform.OS === 'ios' ? 40 : 10,
-		width: 200,
+        marginTop: Platform.OS === 'ios' ? 80 : 10,
+        marginBottom: Platform.OS === 'ios' ? 40 : 10,
+		width: 176,
 		height: 50,
 	},
     links:{

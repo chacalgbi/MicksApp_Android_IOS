@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, BackHandler } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, BackHandler, Platform, StatusBar } from 'react-native'
 import UsersContext from '../utils/UserProvider'
 import InputNumber from '../componentes/InputNumber'
 import Btn from '../componentes/Btn'
@@ -44,6 +44,15 @@ export default function Cpf({navigation}) {
             final = formatado;
         }
         return final;
+    }
+
+    function maxLenght(v){
+        if(v.length > 18){
+            setErro('Limite de caracteres excedido!')
+        }else{
+            setState(v)
+            setErro('')
+        }
     }
 
     function set(type, payload){
@@ -186,18 +195,18 @@ export default function Cpf({navigation}) {
             }
 
             <ScrollView style={stl.scroll}>
+            <StatusBar translucent={false} barStyle="light-content" backgroundColor={estilo.cor.fundo} />
                 <View style={stl.corpo}>
                     <Image style={stl.img} source={logoMicks} />
                     <Text style={stl.title}>Olá Cliente!</Text>
                     <Text style={stl.subTitle}>Digite seu CPF ou CNPJ</Text>
                     <InputNumber
                         placeholder='Digite seu documento'
-                        onChangeText={(v)=>{ 
-                            setState(v)
-                            setErro('')
+                        onChangeText={(v)=>{
+                            maxLenght(v)
                         }}
                         value={state}
-                        errorStyle={{ color: 'red' }}
+                        errorStyle={{fontSize: 17, color:'#FF6347'}}
                         errorMessage={erro}
                     />
                     <Btn title="Verificar" func={ ()=>{ getCPFIntegrator(state) } } />
@@ -226,17 +235,16 @@ export default function Cpf({navigation}) {
 
 const stl = StyleSheet.create({
     scroll:{
-        backgroundColor: estilo.cor.fundo,
-        flex: 1
+        backgroundColor: estilo.cor.fundo
     },
     img:{
-        marginTop: 40,
-		width: 200,
-		height: 80,
+        marginTop: Platform.OS === 'ios' ? 170 : 80,
+		width: 246,
+		height: 70,
 	},
 	corpo:{
 		flex: 1,
-		justifyContent: 'flex-start', // alinhar no sentido vertical (em cima e embaixo)
+		justifyContent: 'center', // alinhar no sentido vertical (em cima e embaixo)
 		alignItems: 'center', // alinha no sentido horizontal (esquerda e direita)
 	},
 	title:{

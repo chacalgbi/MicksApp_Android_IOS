@@ -68,7 +68,7 @@ function Splash({ navigation }) {
 		}
 	}
 
-	setTimeout(()=>{ decidir() }, 800)
+	setTimeout(()=>{ decidir() }, 1000)
 
 	return (
 		<TouchableOpacity style={stl.corpo} >
@@ -131,8 +131,8 @@ export default function App() {
 
 const stl = StyleSheet.create({
     img:{
-		width: 350,
-		height: 150,
+		width: 300,
+		height: 85,
 	},
 	corpo:{
 		backgroundColor: '#002171',

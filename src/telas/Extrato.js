@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, TouchableWithoutFeedback, KeyboardAvoidingView, Modal, FlatList, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Animated, TouchableWithoutFeedback, KeyboardAvoidingView, Modal, FlatList, SafeAreaView } from 'react-native';
 import { BottomSheet, ListItem } from 'react-native-elements';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons'
 import UsersContext from '../utils/UserProvider'
@@ -14,10 +14,12 @@ export default function Extrato(props){
     const [daysVisible, setDaysVisible] = useState(false)
     const [seach, setSeach] = useState(false)
     const [namePlain, setNamePlain] = useState('')
-    const [numDays, SetDays] = useState(30)
+    const [numDays, SetDays] = useState(5)
     const [conections, SetConections] = useState([])
     const [warning, setWarning] = useState('')
     const [total, setTotal] = useState('')
+    const [ultima_conexao, setUltima_conexao] = useState(false)
+    const [value, setValue] = useState('10')
 
     const plans = users_data.descriSer.split(',')
     const login = users_data.login.split(',')
@@ -41,7 +43,7 @@ export default function Extrato(props){
                     <View style={stl.container1}>
 
                         <View style={stl.viewTitulo}>
-                            <Text style={stl.textMenu}>Escolha seu plano</Text>
+                            <Text style={stl.textMenu}>EXTRATO DE CONEXÃO</Text>
                         </View>
 
                         <FlatList 
@@ -54,6 +56,7 @@ export default function Extrato(props){
                                 </TouchableOpacity>
                             }
                         />
+
 
                     </View>
                 </KeyboardAvoidingView>
@@ -101,8 +104,18 @@ export default function Extrato(props){
                     setWarning(res.data.msg)
                     
                     if(res.data.erroGeral === 'nao'){
-                        setTotal(`Total Download: ${res.data.totalDo}  Total Upload: ${res.data.totalUp}`)
-                        SetConections(res.data.dados)
+                        setTotal(`Total de ${numDays} dias: Download ${res.data.totalDo} - Upload ${res.data.totalUp}`)
+                        let temp = []
+                        let estado = false
+                        res.data.dados.map((item)=>{
+                            if(item.fim == null && estado == false){
+                                estado = true
+                                temp.push(item)
+                            }else if(item.fim != null){
+                                temp.push(item)
+                            }
+                        })
+                        SetConections(temp)
                     }else{
                         setWarning(res.data.msg)
                     }
@@ -119,7 +132,7 @@ export default function Extrato(props){
     }
 
     return(
-        <SafeAreaView style={{flex: 1, width: '100%', backgroundColor: estilo.cor.fundo}}>
+        <SafeAreaView style={{flex: 1, backgroundColor: estilo.cor.fundo}}>
             {
                 isVisible && <SetPlan isVisible={isVisible} onCancel={()=>{ setIsVisible(false) }} />
             }
@@ -135,6 +148,8 @@ export default function Extrato(props){
                     renderItem={(obj)=> <ConectionList ad={obj} /> }
                 />
             </View>
+
+
             <TouchableOpacity onPress={ ()=>{ setIsVisible(true)} } style={stl.img}>
                 <IconMaterial name='plus-circle' size={50} style={{color: estilo.cor.fonte}} />
             </TouchableOpacity>
@@ -171,10 +186,12 @@ export default function Extrato(props){
 const stl = StyleSheet.create({
     conectionList:{
         flex: 1,
-        backgroundColor: estilo.cor.fundo,
-        padding: 5,
-        borderRadius: 15,
-        marginBottom: 10
+        backgroundColor: estilo.cor.fonte,
+        padding: 4,
+        borderRadius: 10,
+        marginBottom: 10,
+        borderWidth: 1,
+        borderColor: estilo.cor.fundo
     },
     textList2:{
         color: estilo.cor.fundo,
@@ -201,8 +218,9 @@ const stl = StyleSheet.create({
     },
     textMenu:{
         color: estilo.cor.fonte,
-        fontSize: 22,
+        fontSize: 25,
         fontWeight: 'bold',
+        textAlign: 'center'
     },
     img:{
         position: 'absolute',
@@ -282,10 +300,10 @@ const stl = StyleSheet.create({
     itemTitle:{
         fontWeight: 'bold',
         fontSize: 18,
-        color: estilo.cor.fonte,
+        color: estilo.cor.fundo,
     },
     itemBody:{
-        color: estilo.cor.fonte,
+        color: estilo.cor.fundo,
         fontSize: 13,
     },
     item2:{

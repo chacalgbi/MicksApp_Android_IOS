@@ -14,6 +14,7 @@ import indique from '../assets/indique.png'
 import veloConexao from '../assets/veloConexao.png'
 import micksTv from '../assets/micksTv.png'
 import menu from '../assets/menu.png'
+import sair from '../assets/sair.png'
 
 const storage = new MMKVStorage.Loader().withEncryption().initialize()
 const windowWidth = Dimensions.get('window').width;
@@ -97,7 +98,7 @@ export default function Main({ navigation }) {
                         <Image style={{width: 70, height: 70 }} source={menu} />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => { setConfirm(true) }}>
-                        <Icon name='exit-to-app' size={50} color={estilo.cor.fonte} />
+                    <Image style={{width: 40, height: 40 }} source={sair} />
                     </TouchableOpacity>
                 </View>
                 <Text style={stl.nameClient}>{`Olá, ${nameClient[0]} ${nameClient[1]}`}</Text>
@@ -131,7 +132,7 @@ export default function Main({ navigation }) {
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => { Linking.openURL(urlLojaMicksTV); }} style={stl.itemMenu} >
                         <Image style={stl.img} source={micksTv} />
-                        <Text style={stl.labels}>Micks TV</Text>
+                            <Text style={stl.labels}>Aplicativo Micks TV</Text>
                     </TouchableOpacity>             
                 </View>
 
@@ -211,9 +212,10 @@ const stl = StyleSheet.create({
         height: 45,
     },
     textButton: {
-        fontSize: 18,
+        fontSize: 13,
         fontWeight: 'bold',
-        color: estilo.cor.fonte
+        color: estilo.cor.fonte,
+        marginLeft: 15
     },
     nameClient:{
         color: estilo.cor.fonte,
@@ -224,7 +226,7 @@ const stl = StyleSheet.create({
     header: {
         flex: 1,
         backgroundColor: estilo.cor.fundo,
-        paddingTop: Platform.OS === 'ios' ? 40 : 1,
+        paddingTop: Platform.OS === 'ios' ? 50 : 4,
         paddingLeft: Platform.OS === 'ios' ? 20 : 10,
     },
     headerLine:{
@@ -256,11 +258,12 @@ const stl = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'center',
         marginLeft: 10,
+        marginRight: 10,
+        marginTop: 10,
         backgroundColor: '#9BB5F2',
         borderWidth: 1,
         borderColor: '#002171',
         borderRadius: 10,
-        marginRight: 10,
         paddingLeft: 10,
         paddingRight: 10
     },
@@ -277,14 +280,25 @@ const stl = StyleSheet.create({
     },
     itemMenu: {
         flex: 1,
-        justifyContent: 'flex-start', // alinhar no sentido vertical (em cima e embaixo)
+        justifyContent: 'space-evenly', // alinhar no sentido vertical (em cima e embaixo)
         alignItems: 'center', // alinha no sentido horizontal (esquerda e direita)
         borderWidth: 1,
         borderColor: '#002171',
         borderRadius: 10,
         marginTop: 5,
         marginRight: 10,
-        height: 130
+        height: Platform.OS === 'ios' ? 150 : 140,
+    },
+    labels:{
+        color: estilo.cor.fundo,
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center'
+    },
+    labelHelp:{
+        color: estilo.cor.fundo,
+        fontSize: 12,
+        fontWeight: 'bold',
     },
     indique:{
         marginLeft: 10,
@@ -299,16 +313,6 @@ const stl = StyleSheet.create({
         marginRight: 10,
         height: 100,
         paddingLeft: 20
-    },
-    labels:{
-        color: estilo.cor.fundo,
-        fontSize: 17,
-        fontWeight: 'bold',
-    },
-    labelHelp:{
-        color: estilo.cor.fundo,
-        fontSize: 12,
-        fontWeight: 'bold',
     },
     planosAtivos:{
         color: estilo.cor.item,

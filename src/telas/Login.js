@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { StyleSheet, Text, View, ScrollView, Alert, Image, TouchableOpacity, BackHandler, Platform } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Alert, Image, TouchableOpacity, BackHandler, Platform, StatusBar } from 'react-native'
 import logoMicks from '../assets/logo.png'
 import UsersContext from '../utils/UserProvider'
 import estilo from '../utils/cores'
@@ -124,6 +124,7 @@ export default function Login({ navigation }) {
 
 	return (
         <ScrollView style={stl.scroll}>
+            <StatusBar translucent={false} barStyle="light-content" backgroundColor={estilo.cor.fundo} />
             <View style={stl.corpo}>
                 <Image style={stl.img} source={logoMicks} />
                 <Text style={stl.title}>Login</Text>
@@ -135,7 +136,7 @@ export default function Login({ navigation }) {
                         setUserEmailErr('')
                     }}
                     value={userEmail}
-                    errorStyle={{ color: 'red' }}
+                    errorStyle={{fontSize: 17, color:'#FF6347'}}
                     errorMessage={userEmailErr}
                 />
 
@@ -146,7 +147,7 @@ export default function Login({ navigation }) {
                         setUserPassErr('')
                     }}
                     value={userPass}
-                    errorStyle={{ color: 'red' }}
+                    errorStyle={{fontSize: 17, color:'#FF6347'}}
                     errorMessage={userPassErr}
                 />
 
@@ -212,8 +213,9 @@ const stl = StyleSheet.create({
         paddingTop: 15
     },
     img:{
-        marginTop: Platform.OS === 'ios' ? 40 : 10,
-		width: 200,
-		height: 60,
+        marginTop: Platform.OS === 'ios' ? 70 : 20,
+        marginBottom: Platform.OS === 'ios' ? 80 : 40,
+		width: 246,
+		height: 70,
 	}
 });

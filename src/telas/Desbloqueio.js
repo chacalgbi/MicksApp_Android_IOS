@@ -8,12 +8,12 @@ import API from '../utils/API'
 
 export default function Desbloqueio(props){
     const {users_data, dispatch} = useContext(UsersContext)
-    const [warning, setWarning] = useState('Buscando planos suspensos');
-    const [seach, setSeach] = useState(true);
-    const [plainBlocked, setPlainBlocked] = useState('');
-    const [ok, setOk] = useState(false);
-    const [button, setButton] = useState('#4460D9');
-    const [buttonText, setButtonText] = useState('Solicitar desbloqueio');
+    const [warning, setWarning] = useState('Buscando planos suspensos')
+    const [seach, setSeach] = useState(true)
+    const [plainBlocked, setPlainBlocked] = useState('')
+    const [ok, setOk] = useState(true)
+    const [button, setButton] = useState('#4460D9')
+    const [buttonText, setButtonText] = useState('Solicitar desbloqueio')
 
     async function verify(){
         await API('isBlocked', { codCli: users_data.codCli })
@@ -31,6 +31,7 @@ export default function Desbloqueio(props){
                     })
                     let unique = [...new Set(blocked)]; // Tira todos os valores repetidos
                     if(unique.length === 0){
+                        setOk(false)
                         setWarning("Você não possui planos suspensos por débito!")
                         setButtonText('Tudo certo! :)')
                     }else{
@@ -49,7 +50,6 @@ export default function Desbloqueio(props){
 
     async function solicitar(){
         setButton('#4460D9')
-        setOk(false)
         if(plainBlocked.length != 0){
             for (const [index, cod] of plainBlocked.entries()) {
                 await API('desbloqueio', { codsercli: cod })
@@ -57,7 +57,6 @@ export default function Desbloqueio(props){
                     if(res.data.erroGeral){
                         setWarning(res.data.msg)
                         if(res.data.erroGeral === 'nao'){
-                            setOk(true)
                             setButton('#3CB371')
                         }else{
                             setButton('#FF6347')
@@ -77,16 +76,15 @@ export default function Desbloqueio(props){
     }, [])
 
     return(
-        <View style={{flex: 1, width: '100%'}}>
+        <View style={{flex: 1}}>
+            <View style={stl.body2}></View>
 
-            <View style={stl.body}>
+             <View style={stl.body}>
                 <Text style={stl.title}>{warning}</Text>
-                <Btn title={buttonText} func={ ()=>{ solicitar() } } />
+                {ok && <Btn title={buttonText} func={ ()=>{ solicitar() } } />}
             </View>
 
-            <View style={stl.body2}>
-                
-            </View>
+            <View style={stl.body2}></View>
 
             <Msg show={seach}
                 showProgress={true}
@@ -113,7 +111,7 @@ const stl = StyleSheet.create({
     },
     body2:{
         backgroundColor: estilo.cor.fundo,
-        flex: 2,
+        flex: 1,
         justifyContent: "flex-start",
         alignItems: 'center',
     },

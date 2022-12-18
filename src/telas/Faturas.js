@@ -10,6 +10,13 @@ import Msg from '../componentes/Msg'
 import API from '../utils/API'
 import plano from '../assets/plano.png'
 import minhasFaturas from '../assets/minhasFaturas.png'
+import fatura_ok from '../assets/fatura_ok.png'
+import fatura_vence_hoje from '../assets/fatura_vence_hoje.png'
+import fatura_vencida from '../assets/fatura_vencida.png'
+
+import fatura_down from '../assets/fatura_down.png'
+import fatura_cod_barra from '../assets/fatura_cod_barra.png'
+import fatura_pix from '../assets/fatura_pix.png'
 
 export default function Faturas(props) {
     const {users_data, dispatch} = useContext(UsersContext)
@@ -23,12 +30,13 @@ export default function Faturas(props) {
     const [venciFatura, setVenciFatura] = useState()
     const [descriFatura, setDescriFatura] = useState()
     const [linkPdf, setLinkPdf] = useState()
+    const [semBoletos, setSemBoletos] = useState('')
     
 
     function ListEmpty(){
         return(
-            <View>
-                <Text style={stl.warning}>Erro ao carregar os Boletos, tente novamente mais tarde.</Text>
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{color: estilo.cor.fundo, fontSize: 25}}>{semBoletos}. {warning}</Text>
             </View>
         )
     }
@@ -40,14 +48,14 @@ export default function Faturas(props) {
 
         if(platform == 'ios'){
             config = {
-                path: ReactNativeBlobUtil.fs.dirs.DocumentDir + '/' + data + '_boleto.pdf', appendExt: 'pdf',
+                path: ReactNativeBlobUtil.fs.dirs.DocumentDir + '/' + data + '_boletoMicks.pdf', appendExt: 'pdf',
                 fileCache: true,
                 notification: true,
                 IOSDownloadTask: true
             }
         }else{
             config = {
-                path: ReactNativeBlobUtil.fs.dirs.DownloadDir + '/' + data + '_boleto.pdf',
+                path: ReactNativeBlobUtil.fs.dirs.DownloadDir + '/' + data + '_boletoMicks.pdf',
                 appendExt: 'pdf',
                 fileCache: true,
                 addAndroidDownloads: {
@@ -116,16 +124,12 @@ export default function Faturas(props) {
                 //console.log(res.data.msg)
                 setMsg(res.data.msg)
                 setWarning(res.data.msg)
-
                 if(res.data.erroGeral === 'nao'){
                     res.data.boletos.map((item, index)=>{
                         boletoTemp.push(item)
                         //console.log(`Boleto ${index} - ${item.cod_fatura}`)
                     })
-                }else{
-                    setWarning(res.data.msg)
                 }
-
             })
             .catch((e)=>{
                 //console.log(e);
@@ -136,6 +140,8 @@ export default function Faturas(props) {
         
         if(boletoTemp.length > 0){
             setBoletos(boletoTemp) // Um console.log(boletos) aqui não vai aparecer os dados, pois essa variável só é mudada na próxima renderização
+        }else{
+            setSemBoletos('Faturas não encontradas')
         }
         
         setInfo(false)
@@ -208,17 +214,17 @@ export default function Faturas(props) {
                         </View>
 
                         <TouchableOpacity style={stl.item2} onPress={ ()=>{ downloadPdf() }} >
-                            <IconMaterial name='download' size={70} style={{ color: '#191970' }} />
+                            <Image style={{width: 50, height: 50}} source={fatura_down} />
                             <Text style={stl.textList2}>Fazer download do boleto</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={stl.item2} onPress={ async()=>{ Clipboard.setString(`${codBarra}`); Alert.alert('Códido de barras copiado!', 'Abra seu App de pagamento e cole o código de barras!') } } >
-                            <IconMaterial name='barcode' size={70} style={{ color: '#191970' }} />
+                            <Image style={{width: 50, height: 50}} source={fatura_cod_barra} />
                             <Text style={stl.textList2}>Copiar código de barras</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity style={stl.item2} onPress={ async()=>{ Clipboard.setString(`${codPix}`); Alert.alert('Códido PIX copiado!', 'Abra seu App de pagamento e cole o código do PIX!') } } >
-                            <IconMaterial name='cash-fast' size={70} style={{ color: '#191970' }} />
+                            <Image style={{width: 50, height: 50}} source={fatura_pix} />
                             <Text style={stl.textList2}>Copiar código PIX</Text>
                         </TouchableOpacity>
 
@@ -239,12 +245,12 @@ export default function Faturas(props) {
             let vencer1 = new Date(vencer)
 
             if(dateNow === date){
-                return '#FFFF00'
+                return fatura_vence_hoje
             }else{
                 if(hoje > vencer1){
-                    return '#FF0000' //vencidas
+                    return fatura_vencida //vencidas
                 }else{
-                    return '#191970' // Em dia
+                    return fatura_ok// Em dia
                 }
             }
         }
@@ -271,9 +277,10 @@ export default function Faturas(props) {
                 style={stl.item}
             >
                 <View style={stl.icon}>
-                    <IconMaterial name='note-text-outline' size={70} style={{ color: cor(props.ad.item.vencimento) }} />
+                <Image style={{width: 40, height: 50}} source={cor(props.ad.item.vencimento)} />
                 </View>
                 <View style={stl.viewBoletos1}>
+                    <Text style={{fontSize: 12, color: '#A9A9A9'}}>{props.ad.item.decricao1}</Text>
                     <Text style={stl.textList}>Vencimento: {props.ad.item.vencimento}</Text>
                     <Text style={stl.textList}>Valor: R${props.ad.item.valor_a_pagar}</Text>
                     <Text style={stl.infor}>{information(props.ad.item.dias_vencidos)}</Text>
@@ -297,12 +304,15 @@ export default function Faturas(props) {
                 </View>
             </View>
 
-            <FlatList 
-                data={boletos}
-                keyExtractor={item => `${Math.floor(Math.random() * 65536)}`}
-                renderItem={(obj)=> <ListBoletos ad={obj} /> }
-                listEmptyComponent={()=>{ <ListEmpty /> }}
-            />
+            {
+                semBoletos.length != 0 ? <ListEmpty /> :
+                <FlatList 
+                    data={boletos}
+                    keyExtractor={item => `${Math.floor(Math.random() * 65536)}`}
+                    renderItem={(obj)=> <ListBoletos ad={obj} /> }
+                    listEmptyComponent={()=>{ <ListEmpty /> }}
+                />
+            }
 
             <View style={{justifyContent: 'flex-start', alignItems: 'center',}}>
                 <Text style={stl.subtitle}>{warning}</Text>
@@ -367,13 +377,13 @@ const stl = StyleSheet.create({
     item2:{
         height: Platform.OS === 'ios' ? 80 : 75,
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        padding: 4,
+        paddingLeft: 10,
         borderWidth: 1,
         borderColor: '#002171',
         borderRadius: 10,
-        margin: Platform.OS === 'ios' ? 15 : 8
+        margin: Platform.OS === 'ios' ? 10 : 8
     },
     viewTitulo:{
         backgroundColor: estilo.cor.fundo,
@@ -419,15 +429,12 @@ const stl = StyleSheet.create({
         color: estilo.cor.fundo,
         fontSize: 18,
         fontWeight: 'bold',
+        marginLeft: Platform.OS === 'ios' ? 30 : 20
     },
     textMenu:{
         color: estilo.cor.fonte,
         fontSize: 22,
         fontWeight: 'bold',
-    },
-    warning:{
-        color: estilo.cor.fundo,
-        fontSize: 15,
     },
     img:{
 		width: 70,
