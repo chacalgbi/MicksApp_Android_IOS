@@ -91,9 +91,10 @@ export default function Relatar() {
 
     return(
         <ScrollView style={stl.scroll}>
+            <Text style={stl.tel}>Informe seu contato</Text>
             <View style={stl.corpo}>
                 <InputCel
-                    placeholder='Digite seu n° de contato'
+                    placeholder='Digite seu n° de celular'
                     mask={"([00]) [0].[0000]-[0000]"}
                     onChangeText={(v)=>{ 
                         setCel(v)
@@ -105,7 +106,7 @@ export default function Relatar() {
                 />
                 <InputText
                     placeholder='Relate seu problema'
-                    onChangeText={(v) => { 
+                    onChangeText={(v) => {
                         setObs(v)
                         setObsErr('')
                     }}
@@ -182,6 +183,14 @@ const stl = StyleSheet.create({
     scroll:{
         backgroundColor: estilo.cor.fundo,
         flex: 1
+    },
+    tel:{
+        fontSize: 20,
+        marginLeft: 20,
+
+        color: estilo.cor.fonte,
+        justifyContent: 'center', // alinhar no sentido vertical (em cima e embaixo)
+		alignItems: 'center',
     },
     corpo:{
         paddingTop: 20,

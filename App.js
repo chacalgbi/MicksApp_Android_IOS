@@ -31,7 +31,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { Image, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import { UsersProvider } from './src/utils/UserProvider'
 import UsersContext from './src/utils/UserProvider'
-import LottieView from 'lottie-react-native'
 import logoMicks from './src/assets/logo.png'
 import CPF from './src/telas/CPF'
 import Main from './src/telas/Main'
@@ -67,13 +66,11 @@ function Splash({ navigation }) {
 			navigation.navigate('Main')
 		}
 	}
-
-	setTimeout(()=>{ decidir() }, 1000)
+	setTimeout(()=>{ decidir() }, 500)
 
 	return (
 		<TouchableOpacity style={stl.corpo} >
 			<Image style={stl.img} source={logoMicks} />
-			<LottieView autoPlay loop style={{width: 70, height: 70}} source={require('./src/assets/03.json')} />
 		</TouchableOpacity>
 	);
 }
