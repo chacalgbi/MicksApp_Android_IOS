@@ -16,6 +16,7 @@ export const UsersProvider = (props) => {
 	const [name, setName]               = useMMKVStorage("name", storage, "");
 	const [email, setEmail]             = useMMKVStorage("email", storage, "");
 	const [login, setLogin]             = useMMKVStorage("login", storage, "");
+    const [jwt, setJwt]                 = useMMKVStorage("jwt", storage, "");
 
 	let contexto = {
         appLogged: appLogged,
@@ -27,7 +28,8 @@ export const UsersProvider = (props) => {
         name: name,
 		userApp: userApp,
         email, email,
-        login: login
+        login: login,
+        jwt: jwt
 	}
 
     const acoes = {
@@ -47,6 +49,7 @@ export const UsersProvider = (props) => {
                 cliDOC: cliDOC,
                 name: name,
                 email: email,
+                jwt: jwt
                 
             }
             return contexto1
@@ -69,7 +72,8 @@ export const UsersProvider = (props) => {
                 name: action.payload.name,
                 login: action.payload.login,
                 userApp: userApp,
-                email: email
+                email: email,
+                jwt: jwt
             }
             return contexto1
         },
@@ -87,7 +91,8 @@ export const UsersProvider = (props) => {
                 login: login,
                 name: name,
                 userApp: 'yes',
-                email: action.payload
+                email: action.payload,
+                jwt: jwt
             }
             return contexto1
         },
@@ -100,6 +105,7 @@ export const UsersProvider = (props) => {
             setName(action.payload.nome)
             setEmail(action.payload.email)
             setLogin(action.payload.login)
+            setJwt(action.payload.jwt)
 
             setUserApp('yes')
             setAppLogged('yes')
@@ -116,7 +122,8 @@ export const UsersProvider = (props) => {
                 cliDOC: action.payload.doc,
                 name: action.payload.nome,
                 email: action.payload.email,
-                login: action.payload.login
+                login: action.payload.login,
+                jwt: action.payload.jwt
             }
             return contexto1
         },
@@ -130,6 +137,7 @@ export const UsersProvider = (props) => {
             setCliDOC('')
             setName('')
             setEmail('')
+            setJwt('')
             let cleaned = {
                 appLogged: 'no',
                 clientMicks: 'no',
@@ -139,7 +147,8 @@ export const UsersProvider = (props) => {
                 descriSer: '',
                 cliDOC: '',
                 name: '',
-                email: ''
+                email: '',
+                jwt: ''
             }
             return cleaned
         },
@@ -158,7 +167,8 @@ export const UsersProvider = (props) => {
                 cliDOC: cliDOC,
                 name: name,
                 email: email,
-                login: login
+                login: login,
+                jwt: jwt
             }
             return contexto
         }

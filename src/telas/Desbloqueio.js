@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Alert } from 'react-native'
 import UsersContext from '../utils/UserProvider'
 import estilo from '../utils/cores'
 import Btn from '../componentes/Btn'
@@ -16,7 +16,8 @@ export default function Desbloqueio(props){
     const [buttonText, setButtonText] = useState('Solicitar desbloqueio')
 
     async function verify(){
-        await API('isBlocked', { codCli: users_data.codCli })
+        const header = { headers: { "x-access-token": `${users_data.jwt}` } }
+        await API('isBlocked', { codCli: users_data.codCli }, header)
         .then((res)=>{
             if(res.data.erroGeral){
                 setWarning(res.data.msg)
@@ -43,16 +44,21 @@ export default function Desbloqueio(props){
             }
         })
         .catch((e)=>{
+            if(e.response.status == 401){
+                Alert.alert('Falha de Autenticação', `${e.response.data.msg}. ${e.response.data.error.message} - ${e.response.data.error.name}`)
+            }else{
+                setWarning(e)
+            } 
             //console.log(e);
-            setWarning(e)
         });
     }
 
     async function solicitar(){
+        const header = { headers: { "x-access-token": `${users_data.jwt}` } }
         setButton('#4460D9')
         if(plainBlocked.length != 0){
             for (const [index, cod] of plainBlocked.entries()) {
-                await API('desbloqueio', { codsercli: cod })
+                await API('desbloqueio', { codsercli: cod }, header)
                 .then((res)=>{
                     if(res.data.erroGeral){
                         setWarning(res.data.msg)
@@ -64,8 +70,12 @@ export default function Desbloqueio(props){
                     }
                 })
                 .catch((e)=>{
+                    if(e.response.status == 401){
+                        Alert.alert('Falha de Autenticação', `${e.response.data.msg}. ${e.response.data.error.message} - ${e.response.data.error.name}`)
+                    }else{
+                        setWarning(e)
+                    }
                     //console.log(e);
-                    setWarning(e)
                 });
             }
         }

@@ -118,9 +118,10 @@ export default function Faturas(props) {
         //console.log("Códigos de Cliente:", arrayCoder)
 
         let boletoTemp = []
+        const header = { headers: { "x-access-token": `${users_data.jwt}` } }
         for (const [index, cod] of arrayCoder.entries()) {
 
-            await API('faturas_app', {codcli: cod }).then((res)=>{
+            await API('faturas_app', {codcli: cod }, header).then((res)=>{
                 //console.log(res.data.msg)
                 setMsg(res.data.msg)
                 setWarning(res.data.msg)
@@ -132,8 +133,13 @@ export default function Faturas(props) {
                 }
             })
             .catch((e)=>{
+                if(e.response.status == 401){
+                    Alert.alert('Falha de Autenticação', `${e.response.data.msg}. ${e.response.data.error.message} - ${e.response.data.error.name}`)
+                }else{
+                    showErro(e)
+                }
                 //console.log(e);
-                showErro(e)
+                
             });
 
         }

@@ -1,26 +1,25 @@
 import React from 'react';
-import { StyleSheet, View, Text, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Input } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import estilo from '../utils/cores'
-import TextInputMask from 'react-native-text-input-mask';
+//import TextInputMask from 'react-native-text-input-mask';
 
 export default function Btn(props){
     return(
-        <>
-            <View style={stl.container}>
-                <Icon
-                    name='whatsapp'
-                    size={24}
-                    color={estilo.cor.fundo}
-                />
-                <TextInputMask
-                    style={stl.font}
-                    keyboardType='numeric' 
-                    {...props}
-                />
-            </View>
-            <Text style={stl.erroMsg}>{props.errorMessage}</Text>
-        </>
+        <Input
+            style={stl.font}
+            inputContainerStyle = {stl.inputBox}
+            keyboardType='numeric'
+            {...props}
+            leftIcon={
+            <Icon
+                name='whatsapp'
+                size={24}
+                color={estilo.cor.fundo}
+            />
+            }
+        />
     )
 }
 
@@ -39,11 +38,14 @@ const stl = StyleSheet.create({
         
     },
 	font:{
-		color: estilo.cor.fundo,
-        fontSize: 18,
-        width: '80%',
-        paddingLeft: 10,
+		color: estilo.cor.fundo
 	},
+    inputBox:{
+        backgroundColor: '#FFFFFF',
+        borderRadius: 10,
+        paddingLeft: 10
+
+    },
     erroMsg:{
         fontSize: 17,
         color: '#FF6347',

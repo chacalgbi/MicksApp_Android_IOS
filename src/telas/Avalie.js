@@ -13,6 +13,7 @@ export default function Avalie(props){
     const [msg, setMsg] = useState('Buscando notas anteriores');
     const [msg1, setMsg1] = useState('Buscando notas anteriores...');
     const [pergunta, setPergunta] = useState('Como você avalia o serviço da Micks?');
+    const header = { headers: { "x-access-token": `${users_data.jwt}` } }
 
     function showErro(e){
         Alert.alert('Ops!', `${e}`)
@@ -25,8 +26,8 @@ export default function Avalie(props){
             email: users_data.email,
             nota: rating
         }
-
-        await API('evaluation', obj)
+        
+        await API('evaluation', obj, header)
         .then((res)=>{
             setTimeout(()=>{ setSeach(false) }, 500)
             if(res.data.erroGeral){
@@ -38,15 +39,19 @@ export default function Avalie(props){
             }
         })
         .catch((e)=>{
-            console.log(e)
-            showErro('Erro interno, tente novamente mais tarde')
+            //console.log(e)
+            if(e.response.status == 401){
+                Alert.alert('Falha de Autenticação', `${e.response.data.msg}. ${e.response.data.error.message} - ${e.response.data.error.name}`)
+            }else{
+                showErro('Erro interno, tente novamente mais tarde')
+            }
         });
     }
 
     async function isGetRating(rating){
         setSeach(true)
 
-        await API('isGetRating', {email: users_data.email})
+        await API('isGetRating', {email: users_data.email}, header)
         .then((res)=>{
             setTimeout(()=>{ setSeach(false) }, 1000)
             if(res.data.erroGeral){
@@ -58,7 +63,11 @@ export default function Avalie(props){
             }
         })
         .catch((e)=>{
-            showErro(`Erro interno. ${e} `)
+            if(e.response.status == 401){
+                Alert.alert('Falha de Autenticação', `${e.response.data.msg}. ${e.response.data.error.message} - ${e.response.data.error.name}`)
+            }else{
+                showErro(`Erro interno. ${e} `)
+            }
         });
     }
 

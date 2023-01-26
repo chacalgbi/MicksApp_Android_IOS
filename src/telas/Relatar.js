@@ -41,7 +41,8 @@ export default function Relatar() {
     async function abrirAtendimento(obj){
         setSeach(true)
 
-        await API('atendimento', obj)
+        const header = { headers: { "x-access-token": `${users_data.jwt}` } }
+        await API('atendimento', obj, header)
         .then((res)=>{
             setTimeout(()=>{ setSeach(false) }, 1500)
             if(res.data.erroGeral){
@@ -66,8 +67,8 @@ export default function Relatar() {
             Alert.alert('Ops!', "Selecione um plano!")
         }else if(motivo == '' ){
             Alert.alert('Ops!', "Selecione um motivo")
-        }else if(cel.length < 16){
-            setCelErr('Ops! Número de telefone inválido! Digite um número com 11 caracteres.')
+        }else if(cel.length < 8){
+            setCelErr('Ops! Número de telefone inválido! Digite um número com 11 caracteres. Ex: (77) 91234-5678')
         }else if(obs.length < 15){
             setObsErr('Ops! Descrição muito curta! Digite uma descrição mais detalhada!')
         }else if(check1 === false){
@@ -95,13 +96,12 @@ export default function Relatar() {
             <View style={stl.corpo}>
                 <InputCel
                     placeholder='Digite seu n° de celular'
-                    mask={"([00]) [0].[0000]-[0000]"}
                     onChangeText={(v)=>{ 
                         setCel(v)
                         setCelErr('')
                     }}
                     value={cel}
-                    errorStyle={{ color: 'red' }}
+                    errorStyle={{fontSize: 17, color:'#FF6347'}}
                     errorMessage={celErr}
                 />
                 <InputText
@@ -111,7 +111,7 @@ export default function Relatar() {
                         setObsErr('')
                     }}
                     value={obs}
-                    errorStyle={{ color: 'red' }}
+                    errorStyle={{fontSize: 17, color:'#FF6347'}}
                     errorMessage={obsErr}
                 />
                 <CheckBox

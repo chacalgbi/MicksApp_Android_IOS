@@ -76,15 +76,36 @@ export default function Cadastro({ navigation }) {
         });
     }
 
+    //Formata qualquer numero de Celular para o formato (77) 91234-5678
+    function formatar_celular(num){
+        let formatado = num.replace(/\D+/g, "");
+        let final = '';
+        if(formatado.length == 11){
+            final = formatado.replace(/(\d{2})?(\d{5})?(\d{4})/, "($1) $2-$3");
+        }else if(formatado.length == 10){
+            final = formatado.replace(/(\d{2})?(\d{4})?(\d{4})/, "($1) 9$2-$3");
+        }else if(formatado.length ==  9){
+            final = formatado.replace(/(\d{5})?(\d{4})/, "(??) $1-$2");
+        }else if(formatado.length ==  8){
+            final = formatado.replace(/(\d{4})?(\d{4})/, "(??) 9$1-$2");
+        }else{
+            final = "";
+        }
+        return final;
+    }
+
     function checkForm(){
+        const celular = cel.replace(/\D+/g, "")
+
         if(userName.length <= 4){
             setUserNameErr('Nome muito curto! Digite um nome com pelo menos 5 caracteres.')
         }else if(userEmail.length < 10 ){
             setUserEmailErr('Email muito curto! Digite um email com pelo menos 10 caracteres.')
         }else if(userEmail.indexOf('@') == -1 || userEmail.indexOf('.') == -1){
             setUserEmailErr('Email inválido! Digite um email válido.')
-        }else if(cel.length < 16){
-            setCelErr('Número de telefone inválido! Digite um número com 11 caracteres.')
+        }else if(celular.length < 11){
+            console.log(celular)
+            setCelErr('Número de telefone inválido! Digite um número com 11 caracteres. Ex: (77) 91234-5678')
         }else if(userPass.length < 6){
             setUserPassErr('Senha muito curta! Digite uma senha com pelo menos 6 caracteres.')
         }else if(userPass !== userPassConfirm){
@@ -122,12 +143,13 @@ export default function Cadastro({ navigation }) {
                 />
                 <InputCel
                     placeholder='Digite seu telefone'
-                    mask={"([00]) [0].[0000]-[0000]"}
                     onChangeText={(formatted, extracted)=>{ 
                         setCel(formatted)
                         setCelErr('')
                     }}
+                    onBlur={()=>{setCel(formatar_celular(cel))}}
                     value={cel}
+                    errorStyle={{fontSize: 17, color:'#FF6347'}}
                     errorMessage={celErr}
                 />
                 <InputSenha

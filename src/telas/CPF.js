@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, BackHandler, Platform, StatusBar } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, Image, Alert, TouchableOpacity, BackHandler, Platform, StatusBar } from 'react-native'
 import UsersContext from '../utils/UserProvider'
 import InputNumber from '../componentes/InputNumber'
 import Btn from '../componentes/Btn'

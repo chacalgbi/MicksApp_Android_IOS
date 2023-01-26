@@ -9,6 +9,8 @@ import InputSenha from '../componentes/InputSenha'
 
 export default function Modificar(props){
     const {users_data, dispatch} = useContext(UsersContext)
+    const [userPassOld, setUserPassOld] = useState('')
+    const [userPassErrOld, setUserPassErrOld] = useState('')
     const [userPass, setUserPass] = useState('')
     const [userPassErr, setUserPassErr] = useState('')
     const [userPassConfirm, setUserPassConfirm] = useState('')
@@ -16,13 +18,29 @@ export default function Modificar(props){
     const [warning, setWarning] = useState('')
     const [seach, setSeach] = useState(false);
 
+    function set(type, payload){
+        //console.log(`UsersContext: Type: ${type}, Payload: ${payload}`)
+        dispatch({
+            type: type,
+            payload: payload
+        })
+    }
+
+    function getLogin(){
+        setTimeout(()=>{ 
+            set('jaTenhoConta', {})
+        },2500)
+    }
+
     async function redefinir(){
+        const header = { headers: { "x-access-token": `${users_data.jwt}` } }
         const obj = {
             email: users_data.email,
-            senha: userPass
+            senha: userPassOld,
+            nova_senha: userPass
         }
 
-        await API('modify_password', obj)
+        await API('modify_password', obj, header)
         .then((res)=>{
             //console.log(res.data)
             setTimeout(()=>{ setSeach(false) }, 1500)
@@ -30,9 +48,10 @@ export default function Modificar(props){
                 setWarning(res.data.msg)
 
                 if(res.data.erroGeral === 'nao'){
-                    Alert.alert('Sucesso!', 'Sua senha foi alterada!')
+                    Alert.alert('Sucesso!', `${res.data.msg}`)
+                    getLogin()
                 }else{
-                    Alert.alert('Erro interno!', 'Tente novamente mais tarde')
+                    Alert.alert('OPs!', `${res.data.msg}`)
                 }
             }
         })
@@ -43,8 +62,10 @@ export default function Modificar(props){
     }
 
     function checkForm(){
-        if(userPass.length < 6 ){
-            setUserPassErr('Ops! senha muito curta! Digite uma senha com pelo menos 6 caracteres.')
+        if(userPassOld.length < 6 ){
+            setUserPassErrOld('Ops! senha atual muito curta! Digite uma senha com pelo menos 6 caracteres.')
+        }else if(userPass.length < 6 ){
+            setUserPassErr('Ops! Nova senha muito curta! Digite uma senha com pelo menos 6 caracteres.')
         }else if(userPass !== userPassConfirm){
             setUserPassConfirmErr('Ops!! As senhas não conferem!')
         }else{
@@ -57,13 +78,23 @@ export default function Modificar(props){
         <ScrollView style={stl.scroll}>
             <View style={stl.corpo}>
                 <InputSenha
+                    placeholder='Digite a senha atual'
+                    onChangeText={(v) => { 
+                        setUserPassOld(v)
+                        setUserPassErrOld('')
+                    }}
+                    value={userPassOld}
+                    errorStyle={{fontSize: 17, color:'#FF6347'}}
+                    errorMessage={userPassErrOld}
+                />
+                <InputSenha
                     placeholder='Digite a nova senha'
                     onChangeText={(v) => { 
                         setUserPass(v)
                         setUserPassErr('')
                     }}
                     value={userPass}
-                    errorStyle={{ color: 'red' }}
+                    errorStyle={{fontSize: 17, color:'#FF6347'}}
                     errorMessage={userPassErr}
                 />
                 <InputSenha
@@ -73,7 +104,7 @@ export default function Modificar(props){
                         setUserPassConfirmErr('')
                     }}
                     value={userPassConfirm}
-                    errorStyle={{ color: 'red' }}
+                    errorStyle={{fontSize: 17, color:'#FF6347'}}
                     errorMessage={userPassConfirmErr}
                 />
                 <Btn title="Modificar" func={ ()=>{ checkForm() } } />

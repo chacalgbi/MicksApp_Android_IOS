@@ -27,7 +27,6 @@ export default function Main({ navigation }) {
     const [menuVisible, setMenuVisible] = useState(false)
     const [urls, setUrls] = useState([])
     const [urlLojaMicksTV, setUrlLojaMicksTV] = useState('')
-
     const nameClient = users_data.name.split(' ')
 
     const listMenu = [
@@ -38,7 +37,8 @@ export default function Main({ navigation }) {
     ]
 
     async function isGet(){
-		await API('isgetapp', { email: users_data.email, doc: users_data.cliDOC })
+        const header = { headers: { "x-access-token": `${users_data.jwt}` } }
+		await API('isgetapp', { email: users_data.email, doc: users_data.cliDOC }, header)
 		.then((res)=>{
             setTimeout(()=>{
                 setUrls(res.data.urls)
@@ -56,7 +56,12 @@ export default function Main({ navigation }) {
             
 		})
 		.catch((e)=>{
-            Alert.alert('Erro', `${e}`)
+            if(e.response.status == 401){
+                Alert.alert('Falha de Autenticação', `${e.response.data.msg}. ${e.response.data.error.message} - ${e.response.data.error.name}`)
+                setTimeout(()=>{ getLogin() },2000)
+            }else{
+                Alert.alert('Erro', `${e}`)
+            }            
 		})
 	}
 

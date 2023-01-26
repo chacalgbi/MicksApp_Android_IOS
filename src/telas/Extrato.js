@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Animated, TouchableWithoutFeedback, KeyboardAvoidingView, Modal, FlatList, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, Alert, TouchableOpacity, Image, Animated, TouchableWithoutFeedback, KeyboardAvoidingView, Modal, FlatList, SafeAreaView } from 'react-native';
 import { BottomSheet, ListItem } from 'react-native-elements';
 import IconMaterial from 'react-native-vector-icons/MaterialCommunityIcons'
 import UsersContext from '../utils/UserProvider'
@@ -98,7 +98,8 @@ export default function Extrato(props){
         setIsVisible(false)
         
         setTimeout(async () => {
-            await API('conection', { login: login, dias: numDays })
+            const header = { headers: { "x-access-token": `${users_data.jwt}` } }
+            await API('conection', { login: login, dias: numDays }, header)
             .then((res)=>{
                 if(res.data.erroGeral){
                     setWarning(res.data.msg)
@@ -123,7 +124,11 @@ export default function Extrato(props){
                 setTimeout(() => { setSeach(false) }, 1000)
             })
             .catch((e)=>{
-                setWarning(e)
+                if(e.response.status == 401){
+                    Alert.alert('Falha de Autenticação', `${e.response.data.msg}. ${e.response.data.error.message} - ${e.response.data.error.name}`)
+                }else{
+                    setWarning(e)
+                }
                 //console.log(e)
                 setTimeout(() => { setSeach(false) }, 1000)
             })

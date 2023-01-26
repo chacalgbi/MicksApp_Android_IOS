@@ -94,6 +94,7 @@ export default function Login({ navigation }) {
                             doc: res.data.dados.resposta[0].doc,
                             descriSer: res.data.dados.resposta[0].descriSer,
                             login: res.data.dados.resposta[0].login,
+                            jwt: res.data.jwt
                         }
                         setTimeout(()=>{ set('setAppLoggedYes', obj) }, 1500)
                     }else{
