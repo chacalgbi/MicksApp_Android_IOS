@@ -519,11 +519,14 @@
 				DEVELOPMENT_TEAM = VPTM3AZF6J;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MicksApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MicksApp;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -547,11 +550,14 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VPTM3AZF6J;
 				INFOPLIST_FILE = MicksApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MicksApp;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
